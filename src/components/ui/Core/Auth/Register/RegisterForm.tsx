@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -6,8 +7,21 @@ import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaMicrosoft } from "react-icons/fa";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerValidationSchema } from "./registerValidation";
+import Link from "next/link";
 
 export default function SignupForm() {
+  const form = useForm({
+    resolver:zodResolver(registerValidationSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  })
   const [password, setPassword] = useState("");
   const [passwordStrength, setPasswordStrength] = useState(0);
 
@@ -27,6 +41,10 @@ export default function SignupForm() {
     setPasswordStrength(checkStrength(pass));
   };
 
+  const handleSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
+    handlePasswordChange(data.password);
+    console.log(data);
+  }
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="w-full max-w-md p-6 bg-white shadow-md rounded-lg">
@@ -34,35 +52,71 @@ export default function SignupForm() {
 
         <CardContent>
           <div className="grid gap-4">
-            {/* Name Fields */}
-            <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="First name" />
-              <Input placeholder="Last name" />
-            </div>
-
-            {/* Email Field */}
-            <Input type="email" placeholder="Work Email" />
-
-            {/* Password Field */}
-            <div>
-              <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              <Progress value={passwordStrength} className="mt-2 bg-red" />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleSubmit)}>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel />
+                      <FormControl>
+                        <Input type="text" placeholder="Your Name" className="p-3" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel />
+                      <FormControl>
+                        <Input type="email" placeholder="Email Address" className="p-3" {...field} />
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel />
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Password"
+                          
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div>
+              <Progress value={passwordStrength} className=" bg-red" />
               <p className="text-xs text-gray-500 mt-1">
                 {passwordStrength >= 60
-                  ? "Password is okay"
+                  ? "strong password"
                   : "Use uppercase, numbers & symbols"}
               </p>
             </div>
-
-            {/* Signup Button */}
-            <Button className="w-full">
+               {/* Signup Button */}
+            <Button type="submit" className="w-full cursor-pointer">
               Create account
             </Button>
+              </form>
+              <p>Don&apos;t have an account?<Link href={'/login'} className="text-blue-500">Sign in</Link></p>
+            </Form>
+            {/* Password Field */}
+           
 
             {/* Divider */}
             <div className="relative flex items-center">

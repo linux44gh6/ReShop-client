@@ -10,6 +10,9 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginValidationSchema } from "./logingValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+import { loginUser } from "@/Service/auth";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function LoginForm() {
     const form = useForm({
@@ -19,8 +22,18 @@ export default function LoginForm() {
             password: "",
         }
     });
-    const handleSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
-        console.log(data);
+    const handleSubmit: SubmitHandler<FieldValues> = async(data: FieldValues) => {
+      try {
+        const res=await loginUser(data)
+        console.log(res);
+        if(res.status===201){
+            toast.success(res.message)
+        }else{
+            toast.error(res.message)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -65,7 +78,7 @@ export default function LoginForm() {
                                             <FormItem>
                                                 <FormLabel />
                                                 <FormControl>
-                                                    <Input type="password" placeholder="Email Address" className="p-3" {...field} />
+                                                    <Input type="password" placeholder=" Password" className="p-3" {...field} />
                                                 </FormControl>
                                                 <FormDescription />
                                                 <FormMessage />
@@ -74,6 +87,7 @@ export default function LoginForm() {
                                     />
                                     <Button type="submit" className="w-full  text-white cursor-pointer">Sign In</Button>
                                 </form>
+                                <p>Don&apos;t have an account?<Link href={'/register'} className="text-blue-500">Sign Up</Link></p>
                             </Form>
 
                             {/* Divider */}
