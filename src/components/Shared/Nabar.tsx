@@ -12,10 +12,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import Logo from "../ui/Core/Logo";
+import { useUser } from "@/Context/userContext";
 
 export default function Navbar() {
-  const user=null
-
+  const {user}=useUser()
+ 
   return (
     <header className="border-b w-full">
       <div className="container flex justify-between items-center mx-auto h-16 px-3">
@@ -52,7 +53,7 @@ export default function Navbar() {
               <DropdownMenuLabel >My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">Dashboard</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer"><Link href={`${user.role}/dashboard`}>Dashboard</Link></DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">My Shop</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>

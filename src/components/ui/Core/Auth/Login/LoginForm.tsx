@@ -13,8 +13,11 @@ import { Input } from "@/components/ui/input";
 import { loginUser } from "@/Service/auth";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 
 export default function LoginForm() {
+    const router=useRouter()
     const form = useForm({
         resolver:zodResolver(loginValidationSchema),
         defaultValues: {
@@ -28,6 +31,7 @@ export default function LoginForm() {
         console.log(res);
         if(res.status===201){
             toast.success(res.message)
+            router.push("/")
         }else{
             toast.error(res.message)
         }
