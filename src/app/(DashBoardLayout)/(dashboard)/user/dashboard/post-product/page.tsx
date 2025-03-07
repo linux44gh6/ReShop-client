@@ -1,8 +1,12 @@
+import ProductForm from "@/components/Form/ProductForm";
+import { getAllCategory } from "@/Service/Category";
 
-const PostProduct = () => {
+const PostProduct = async() => {
+    const Category=await getAllCategory()
+
     return (
         <div>
-            <h1>this is post product</h1>
+            <ProductForm Category={Category}/>
         </div>
     );
 };

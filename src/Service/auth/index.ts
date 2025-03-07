@@ -11,6 +11,7 @@ export const loginUser= async(payload:FieldValues)=>{
             "Content-Type": "application/json"
         },
         body:JSON.stringify(payload)
+        
     })
     const data=await res.json()
     console.log(data);
@@ -18,9 +19,14 @@ export const loginUser= async(payload:FieldValues)=>{
     if(data.status===201){
         (await cookies()).set("accessToken",data?.data?.accessToken)
     }
+    
     return data
 }
 
+
+export const logOut=async()=>{
+  (await cookies()).delete("accessToken")
+}
 export const getUser=async():Promise<IUser|null>=>{
   const token=(await cookies()).get("accessToken")?.value
   if(token){

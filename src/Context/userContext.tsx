@@ -13,7 +13,7 @@ interface  IUserProviderValues{
 const UserContext=createContext<IUserProviderValues|null>(null)
 const ContextProvider = ({children}:{children: React.ReactNode}) => {
     const [user,setUser]=useState<IUser|null>(null)
-    const [isLoading,setIsLoading]=useState<boolean>(false)
+    const [isLoading,setIsLoading]=useState<boolean>(true)
     const handleUser=async()=>{
         const currentUser=await getUser()
         setUser(currentUser)

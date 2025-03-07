@@ -1,10 +1,12 @@
 import Spinner from "@/components/Loading/Loading";
-const loadingPage = () => {
+
+
+const loading = () => {
     return (
         <div>
-       <Spinner/>
+            <Spinner/>
         </div>
     );
 };
 
-export default loadingPage;
+export default loading;

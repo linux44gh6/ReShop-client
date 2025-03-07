@@ -14,10 +14,12 @@ import { loginUser } from "@/Service/auth";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/Context/userContext";
 
 
 export default function LoginForm() {
     const router=useRouter()
+    const {setIsLoading}=useUser()
     const form = useForm({
         resolver:zodResolver(loginValidationSchema),
         defaultValues: {
@@ -31,6 +33,7 @@ export default function LoginForm() {
         console.log(res);
         if(res.status===201){
             toast.success(res.message)
+            setIsLoading(true)
             router.push("/")
         }else{
             toast.error(res.message)

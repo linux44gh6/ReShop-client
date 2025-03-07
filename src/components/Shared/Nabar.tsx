@@ -13,10 +13,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import Logo from "../ui/Core/Logo";
 import { useUser } from "@/Context/userContext";
+import Spinner from "../Loading/Loading";
+
+import { logOut } from "@/Service/auth";
 
 export default function Navbar() {
-  const {user}=useUser()
- 
+  const {user,isLoading,setIsLoading}=useUser()
+  if(isLoading){
+    return (
+      <div>
+        <Spinner/>
+      </div>
+    )
+  }
+  const handleLogout = async() => {
+    await logOut()
+    setIsLoading(true)
+  }
   return (
     <header className="border-b w-full">
       <div className="container flex justify-between items-center mx-auto h-16 px-3">
@@ -56,7 +69,7 @@ export default function Navbar() {
               <DropdownMenuItem className="cursor-pointer"><Link href={`${user.role}/dashboard`}>Dashboard</Link></DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">My Shop</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
                 <LogOut />
                 Logout
               </DropdownMenuItem>
