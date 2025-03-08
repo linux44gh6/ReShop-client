@@ -10,6 +10,5 @@ export const getAllCategory = async () => {
         cache: "no-store"
     })
     const data = await res.json()
-    console.log(data);
     return data
 }

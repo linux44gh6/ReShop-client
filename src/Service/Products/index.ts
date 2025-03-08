@@ -1,6 +1,7 @@
 "use server"
 import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
+import { FieldValues } from "react-hook-form"
 
 export const getAllProduct=async()=>{
     const res=await fetch(`${process.env.SERVER_URL}/listings`,{
@@ -39,6 +40,7 @@ export const deleteProduct=async(id:string)=>{
         method:"DELETE",
         body:JSON.stringify({id}),
         headers: {
+            
             Authorization: (await cookies()).get("accessToken")?.value || ""
         },
     })
@@ -47,8 +49,20 @@ export const deleteProduct=async(id:string)=>{
     return data
 }
 
-export const createProduct=async(payload:FormData)=>{
-   
-
-   console.log(payload);
+export const createProduct=async(payload:FieldValues)=>{
+   try{
+    const res=await fetch(`${process.env.SERVER_URL}/listings`,{
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: (await cookies()).get("accessToken")?.value || ""
+        },
+        body:JSON.stringify(payload)
+    })
+    revalidateTag("product")
+    const result=await res.json()
+    return result
+   }catch(e){
+    console.log(e);
+   }
 }   

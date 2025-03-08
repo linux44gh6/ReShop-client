@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,11 @@ import ImagePreviewer from "../ui/Core/ImageUploader/ImagePreviewer";
 import { ICategory } from "@/Types/category";
 import { useState } from "react";
 import { useUser } from "@/Context/userContext";
+import { createProduct } from "@/Service/Products";
+
+import { sendImagesToCloudinary } from "@/Constans";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 const productSchema = z.object({
@@ -27,8 +32,6 @@ const productSchema = z.object({
   condition: z.string().min(1, "Condition is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   images: z.array(z.any()),
-  userID:z.string(),
-  _id:z.string()
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -37,6 +40,7 @@ const ProductForm = ({ Category }: { Category: ICategory[] }) => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const user=useUser()
+  const router=useRouter()
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -48,11 +52,23 @@ const ProductForm = ({ Category }: { Category: ICategory[] }) => {
       images: [],
     },
   });
-  const onSubmit = async (values: ProductFormValues) => {
-
-    values.images = imageFiles
-    values.userID=user._id
-    console.log(values);
+  const onSubmit = async (values: FieldValues) => {
+   try{
+    const images=await sendImagesToCloudinary(imageFiles)
+    values.price=Number(values.price)
+    const payload={...values,images,userID:user?.user?._id,status:"available"}
+    console.log(payload);
+    const res=await createProduct(payload)
+    if(res.status===200){
+      toast.success(res.message)
+      router.push("/user/dashboard/products")
+    }else{
+      toast.error(res.message)}
+    console.log(res);
+   }catch(e){
+    console.log(e);
+   }
+    
   };
 
   return (
@@ -107,7 +123,7 @@ const ProductForm = ({ Category }: { Category: ICategory[] }) => {
                     </FormControl>
                     <SelectContent className="w-full">
                       {Category?.data.map((category:ICategory, index:number) => (
-                        <SelectItem key={index} value={category.name}>
+                        <SelectItem key={index} value={category._id}>
                           {category.name}
                         </SelectItem>
                       ))}

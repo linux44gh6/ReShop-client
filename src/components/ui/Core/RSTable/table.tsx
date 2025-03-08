@@ -22,7 +22,6 @@ export function RSTable({ data }: { data: IProduct[] }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
   const handleOpenModal = (id: string, item: string) => {
     setModalOpen(true);
     setSelectedId(id);
@@ -70,17 +69,17 @@ export function RSTable({ data }: { data: IProduct[] }) {
               <TableCell className="text-sm">{product?.title}</TableCell>
               <TableCell className="text-sm">${product?.price}</TableCell>
               <TableCell className="text-sm">{product?.status || "Pending"}</TableCell>
-              <TableCell className="text-sm">{product?.category || "Mobile"}</TableCell>
+              <TableCell className="text-sm">{product?.category?.name}</TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button variant={"ghost"} size="icon">
-                  <Edit className="w-4 h-4" />
+                  <Edit className="w-4 h-4 cursor-pointer" />
                 </Button>
                 <Button 
                   variant={"ghost"} 
                   size="icon" 
                   onClick={() => handleOpenModal(product._id, product.title)}
                 >
-                  <Trash className="w-4 h-4 text-red-500" />
+                  <Trash className="w-4 h-4 text-red-500 cursor-pointer" />
                 </Button>
               </TableCell>
             </TableRow>

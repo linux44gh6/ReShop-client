@@ -4,7 +4,10 @@ export interface IProduct {
     description: string;
     price: number;
     images: string[];
-    category: string;
+    category:{
+        _id:string;
+        name:string
+    }
     status: string;
     rating:number;
 }
