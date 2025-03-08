@@ -1,9 +1,13 @@
-import Banner from "@/components/Home/Banner";
+import Banner from "@/components/Home/Banner/Banner";
+import Category from "@/components/Home/Category/Category";
+import FeaturedProducts from "@/components/Home/Product/Product";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-    <Banner/>
+    <div className="">
+      <Banner />
+      <Category />
+      <FeaturedProducts/>
     </div>
   );
 }

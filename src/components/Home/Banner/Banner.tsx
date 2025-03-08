@@ -1,16 +1,15 @@
 import Image from "next/image";
 import banner from "@/assets/undraw_shopping-bags_nfsf.svg"
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 const Banner = () => {
-    return (
-        <div
-      className=" container mx-auto border-2 border-[#10b981]  p-4 rounded-3xl mt-[300px]  "
+  return (
+    <div
+      className=" container mx-auto border-2 border-[#10b981]  p-4 rounded-3xl mt-10 "
     >
       <div className="grid grid-cols-2 gap-4 items-center">
         <div className="pl-12">
           <h1 className="text-4xl font-bold leading-normal">
-            Don&apos;t Miss Out on <br /> These Unbeatable Black <br /> Friday
-            Deals!
+          Grab exclusive discounts and massive savings before they’re gone!
           </h1>
           <p className="my-3">
             Save big this Black Friday with unbeatable deals on tech, home
@@ -27,7 +26,7 @@ const Banner = () => {
         </div>
       </div>
     </div>
-    );
+  );
 };
 
 export default Banner;
