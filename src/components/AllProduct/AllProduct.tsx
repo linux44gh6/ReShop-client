@@ -1,74 +1,81 @@
+"use client";
 import { IProduct } from "@/Types/products";
 import FilterSidebar from "./FilterSidebar/FilterSidebar";
 import ProductCard from "../ui/Core/ProductCard";
 import Container from "../ui/Core/Container";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { location } from "@/Constans/location";
+import { ICategory } from "@/Types/category";
+import { useEffect, useState } from "react";
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import LocationMenu from "../LocationMenu/LocationMenu";
+import { getAllProduct } from "@/Service/Products";
+import Spinner from "../Loading/Loading";
 
-const AllProducts = ({ products }: { products: IProduct[] }) => {
-    console.log(products);
+const AllProducts = ({Category}:{Category:ICategory[]}) => {
+    const [products, setProducts] = useState<IProduct[]>([]); 
+    const [selectedCategory, setSelectedCategory] = useState<string>(""); 
+    const [Search, setSearch] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(true);
+
+    // Fetch products based on category and search term
+    useEffect(() => {
+        const fetchProducts = async () => {
+            // Prepare filters for product fetch
+            // const filters = {
+            //     category: selectedCategory,
+            //     searchTerm: Search
+            // };
+            const fetchedProducts = await getAllProduct(); 
+            setProducts(fetchedProducts); 
+            setLoading(false);
+        };
+
+        fetchProducts();
+    }, [selectedCategory, Search]); // Re-fetch when category or search changes
+
+    if (loading) {
+        return (
+            <Spinner/>
+        )
+    }
     return (
         <Container>
             <div className="flex justify-between items-center mt-10">
                 <div>
-                    <h1 className='text-3xl font-bold'>Location</h1>
-                    <Select>
-                        <SelectTrigger className="w-[350px]">
-                            <SelectValue placeholder="Select location" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {
-                                location.map((loc, idx) => (
-                                    <SelectItem key={idx} value={loc.division}>{loc.division}
-                                    
-                                    </SelectItem>
-                                ))
-                            }
-                            
-                            
-                        </SelectContent>
-                    </Select>
-
+                    <h1 className="text-xl font-bold">Location</h1>
+                    <LocationMenu />
                 </div>
                 <div>
-                    <h1>Category</h1>
-                    <Select>
-                        <SelectTrigger className="w-[350px]">
-                            <SelectValue placeholder="Theme" />
+                    <h1 className="text-xl font-bold">Category</h1>
+                    <Select onValueChange={(value) => setSelectedCategory(value)}>
+                        <SelectTrigger className="w-[350px] rounded-full">
+                            <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="light">Light</SelectItem>
-                            <SelectItem value="dark">Dark</SelectItem>
-                            <SelectItem value="system">System</SelectItem>
+                            {Category?.data.map((category: ICategory, idx: number) => (
+                                <SelectItem key={idx} value={category._id}>{category.name}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
-
                 </div>
-                <div className="">
-                    <h1>Find</h1>
+                <div>
+                    <h1 className="text-xl font-bold">Find</h1>
                     <input
+                        onChange={(e) => setSearch(e.target.value)}
                         type="text"
                         placeholder="Search for products"
                         className="w-full border border-gray-300 rounded-full py-2 px-5 focus:outline-none focus:ring-2 focus:ring-[#10b981]"
                     />
                 </div>
             </div>
-            <div className='flex gap-8 my-8'>
+            <div className="flex gap-8 my-8">
                 <div>
                     <FilterSidebar />
                 </div>
-                <div className='grid grid-cols-4 gap-8'>
+                <div className="grid grid-cols-4 gap-8">
                     {products?.data.map((product: IProduct, idx: number) => (
                         <ProductCard key={idx} product={product} />
-                    ))
-                    }
+                    ))}
                 </div>
             </div>
         </Container>

@@ -1,11 +1,13 @@
 import AllProducts from "@/components/AllProduct/AllProduct";
-import { getAllProduct } from "@/Service/Products";
+import { getAllCategory } from "@/Service/Category";
+// import { getAllCategory } from "@/Service/Category";
+// import { getAllProduct } from "@/Service/Products";
 
 const AllProductsPage = async() => {
-    const products=await getAllProduct()
+ const category=await getAllCategory()
     return (
         <div>
-            <AllProducts products={products} />
+            <AllProducts Category={category}  />
         </div>
     );
 };

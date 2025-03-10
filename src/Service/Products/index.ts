@@ -3,21 +3,39 @@ import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { FieldValues } from "react-hook-form"
 
-export const getAllProduct=async()=>{
-    const res=await fetch(`${process.env.SERVER_URL}/listings`,{
-        method:"GET",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        next:{
-            tags:["product"]
-        },
-        cache:"no-store"
-    })
-   
-    const data=await res.json()
-    return data
-}
+export const getAllProduct = async () => {
+    try {
+        // const query = new URLSearchParams({
+        //     search: searchTerm, 
+        // }).toString();
+
+        const url = `${process.env.SERVER_URL}/listings`;
+
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            next: {
+                tags: ["product"],
+            },
+            cache: "no-store",
+        });
+
+        // Check if response is okay
+        if (!res.ok) {
+            throw new Error(`Failed to fetch products: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        throw error; // Ensure the error propagates
+    }
+};
+
+
 
 export const getProductByUserId=async(userId:string)=>{
     const res=await fetch(`${process.env.SERVER_URL}/listings/user/${userId}`,{
@@ -66,3 +84,18 @@ export const createProduct=async(payload:FieldValues)=>{
     console.log(e);
    }
 }   
+
+export const getSingleProduct=async(id:string)=>{
+    const res=await fetch(`${process.env.SERVER_URL}/listings/${id}`,{
+        method:"GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        next:{
+            tags:["product"]
+        },
+        cache:"no-store"
+    })
+    const data=await res.json()
+    return data
+}

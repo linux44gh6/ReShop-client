@@ -1,6 +1,7 @@
 import Image from "next/image";
 import banner from "@/assets/undraw_shopping-bags_nfsf.svg"
 import { Button } from "../../ui/button";
+import Link from "next/link";
 const Banner = () => {
   return (
     <div
@@ -16,10 +17,11 @@ const Banner = () => {
             essentials, fashion, and more! Limited stock.
           </p>
 
-          <Button className="rounded-full mr-2">Buy Now</Button>
-          <Button className="rounded-full" variant="outline">
+          <Button className="rounded-full mr-2 cursor-pointer">Buy Now</Button>
+          <Link href={'/all-product'}>
+          <Button className="rounded-full cursor-pointer" variant="outline">
             All Products
-          </Button>
+          </Button></Link>
         </div>
         <div className="flex items-center justify-center">
           <Image src={banner} alt="cup image" width={500} height={500} className="rounded-3xl" />

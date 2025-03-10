@@ -35,7 +35,7 @@ export default function Navbar() {
     <header className="border-b w-full bg-white shadow-md sticky ">
       <div className="container flex justify-between items-center mx-auto h-16 px-4 md:px-6 lg:px-8">
         <h1 className="text-2xl md:text-3xl font-black flex items-center">
-          <span className="text-[#10b981]">Re</span>Shop
+          <Link href={'/'}><span className="text-[#10b981]">Re</span>Shop</Link>
         </h1>
         <div className="hidden md:flex flex-grow max-w-md">
           <input

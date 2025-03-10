@@ -7,7 +7,6 @@ import { Button } from '../button';
 import { Heart } from 'lucide-react';
 const ProductCard = ({ product }: { product: IProduct }) => {
   //! perform the redux operation for adding product to cart
-
   return (
     <div
     >
@@ -26,7 +25,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
       </CardHeader>
 
       <CardContent className=" p-0 mt-2">
-        <Link href={`/products/${product?._id}`} passHref>
+        <Link href={`/all-product/${product?._id}`} passHref>
           <CardTitle
             title={product?.title}
             className="font-semibold cursor-pointer text-sm"
