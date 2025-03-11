@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { IProduct } from "@/Types/products"
 import Image from "next/image";
 import { Button } from "../../button";
 import { Edit, Trash } from "lucide-react";
@@ -18,8 +17,8 @@ import DeleteConfirmationModal from "../Modal/Modal";
 import { deleteProduct } from "@/Service/Products";
 import { toast } from "sonner";
 
-export function RSTable({ data }: { data: IProduct[] }) {
- 
+import { ICategory } from "@/Types/category";
+export function CategoryTable({ data }: { data:ICategory[]}) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -47,30 +46,24 @@ export function RSTable({ data }: { data: IProduct[] }) {
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Product</TableHead>
+            <TableHead>Icon</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Category</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((product) => (
+          {data?.data.map((product) => (
             <TableRow key={product?._id}>
               <TableCell className="font-medium">
                 <Image
-                  src={product?.images[0]}
+                  src={Array.isArray(product?.icon) ? product.icon[0] : product?.icon || '/default-image.png'}
                   alt="Image"
                   width={50}
                   height={50}
                   className="rounded-md"
                 />
               </TableCell>
-              <TableCell className="text-sm">{product?.title}</TableCell>
-              <TableCell className="text-sm">${product?.price}</TableCell>
-              <TableCell className="text-sm">{product?.status || "Pending"}</TableCell>
-              <TableCell className="text-sm">{product?.category?.name}</TableCell>
+              <TableCell className="text-sm">{product?.name}</TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button variant={"ghost"} size="icon">
                   <Edit className="w-4 h-4 cursor-pointer" />
@@ -78,7 +71,7 @@ export function RSTable({ data }: { data: IProduct[] }) {
                 <Button 
                   variant={"ghost"} 
                   size="icon" 
-                  onClick={() => handleOpenModal(product._id, product.title)}
+                  onClick={() => handleOpenModal(product._id, product.name)}
                 >
                   <Trash className="w-4 h-4 text-red-500 cursor-pointer" />
                 </Button>
@@ -95,6 +88,7 @@ export function RSTable({ data }: { data: IProduct[] }) {
         name={selectedItem}
         onConfirm={handleDelete}
       />
+      
     </div>
   );
 }

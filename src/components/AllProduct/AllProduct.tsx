@@ -16,7 +16,7 @@ const AllProducts = ({Category}:{Category:ICategory[]}) => {
     const [selectedCategory, setSelectedCategory] = useState<string>(""); 
     const [Search, setSearch] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
-
+    const [ProductLocation, setLocation] = useState<string>("");
     // Fetch products based on category and search term
     useEffect(() => {
         const fetchProducts = async () => {
@@ -25,13 +25,16 @@ const AllProducts = ({Category}:{Category:ICategory[]}) => {
             //     category: selectedCategory,
             //     searchTerm: Search
             // };
-            const fetchedProducts = await getAllProduct(); 
+            const fetchedProducts = await getAllProduct({
+                 search: Search,
+                 category: selectedCategory,
+                  location: ProductLocation }); 
             setProducts(fetchedProducts); 
             setLoading(false);
         };
 
         fetchProducts();
-    }, [selectedCategory, Search]); // Re-fetch when category or search changes
+    }, [selectedCategory, Search, ProductLocation]); // Re-fetch when category or search changes
 
     if (loading) {
         return (
@@ -43,7 +46,7 @@ const AllProducts = ({Category}:{Category:ICategory[]}) => {
             <div className="flex justify-between items-center mt-10">
                 <div>
                     <h1 className="text-xl font-bold">Location</h1>
-                    <LocationMenu />
+                    <LocationMenu setLocation={setLocation}/>
                 </div>
                 <div>
                     <h1 className="text-xl font-bold">Category</h1>

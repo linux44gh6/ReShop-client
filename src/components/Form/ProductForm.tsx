@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import ImageUploader from "../ui/Core/ImageUploader";
 import ImagePreviewer from "../ui/Core/ImageUploader/ImagePreviewer";
-import { ICategory } from "@/Types/category";
+import { ICategory, ICategoryResponse } from "@/Types/category";
 import { useState } from "react";
 import { useUser } from "@/Context/userContext";
 import { createProduct } from "@/Service/Products";
@@ -23,8 +23,7 @@ import { createProduct } from "@/Service/Products";
 import { sendImagesToCloudinary } from "@/Constans";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
-
+import { locations } from "@/Constans/location";
 const productSchema = z.object({
   title: z.string().min(2, "Title is required"),
   price: z.string().min(1, "Price is required"),
@@ -32,11 +31,12 @@ const productSchema = z.object({
   condition: z.string().min(1, "Condition is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   images: z.array(z.any()),
+  location: z.string().min(1, "Location is required"),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
-const ProductForm = ({ Category }: { Category: ICategory[] }) => {
+const ProductForm = ({ Category }: { Category:ICategoryResponse }) => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const user=useUser()
@@ -50,8 +50,12 @@ const ProductForm = ({ Category }: { Category: ICategory[] }) => {
       condition: "",
       description: "",
       images: [],
+      location:''
     },
   });
+  const {
+    formState: { isSubmitting },
+  } = useForm();
   const onSubmit = async (values: FieldValues) => {
    try{
     const images=await sendImagesToCloudinary(imageFiles)
@@ -156,7 +160,32 @@ const ProductForm = ({ Category }: { Category: ICategory[] }) => {
                 </FormItem>
               )}
             />
-
+             <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choose a location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {
+                        locations.map((location, idx) => (
+                          <SelectItem key={idx} value={location.district}>
+                            {location.district}
+                          </SelectItem>
+                        ))
+                      }
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Description */}
             <FormField
               control={form.control}
@@ -192,8 +221,8 @@ const ProductForm = ({ Category }: { Category: ICategory[] }) => {
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full col-span-2">
-              Post Product
+            <Button type="submit" className="w-full col-span-2 cursor-pointer">
+              {isSubmitting?"Posting...":"Post Product"}
             </Button>
           </form>
         </Form>

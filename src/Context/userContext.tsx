@@ -4,6 +4,7 @@ import { getUser } from "@/Service/auth";
 import { IUser } from "@/Types/loginData";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 interface  IUserProviderValues{
+    name: string | undefined;
     user:IUser|null
     isLoading:boolean
     setUser:(user:IUser|null)=>void

@@ -13,7 +13,7 @@ const FeaturedProducts = async () => {
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-2xl">Selling Products</h2>
-          <Link href="/products">
+          <Link href="/all-product">
             <Button variant="outline" className="rounded-full">
               All Collection
             </Button>
@@ -21,8 +21,7 @@ const FeaturedProducts = async () => {
         </div>
 
         <div className="grid grid-cols-5 gap-8 my-5">
-          {Array(5)
-            .fill(products?.[0])
+          {products
             .map((product: IProduct, idx: number) => (
               <ProductCard key={idx} product={product} />
             ))}

@@ -1,16 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { RSTable } from "@/components/ui/Core/RSTable/table";
-import { getUser, } from "@/Service/auth";
 
-import {  getProductByUserId } from "@/Service/Products";
+import {  getAllProduct } from "@/Service/Products";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
 
 const page = async() => {
-    const user = await getUser()
 
-    const {data}=await getProductByUserId(user?._id as string) 
+    const {data}=await getAllProduct() 
     console.log(data);
     return (
         <div>

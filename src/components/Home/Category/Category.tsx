@@ -8,7 +8,6 @@ import CategoryCard from "../../ui/Core/CategoryCard";
 
 const Category = async () => {
   const { data: categories } = await getAllCategory();
-  console.log(categories);
   return (
     <div className="container mx-auto my-20">
       <div className="flex items-center justify-between">
@@ -20,8 +19,7 @@ const Category = async () => {
         </Link>
       </div>
       <div className="grid grid-cols-6 gap-8 my-5">
-        {Array(12)
-          .fill(categories?.[0])
+        {categories
           .map((category: ICategory, idx: number) => (
             <CategoryCard key={idx} category={category} />
           ))}

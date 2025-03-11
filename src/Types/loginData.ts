@@ -11,4 +11,7 @@ export interface IUser{
     phone_number: string;
     password: string;
     role: string;
+    status: string;
+    isBlocked: boolean;
+    image:string
 }

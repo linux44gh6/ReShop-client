@@ -3,37 +3,37 @@ import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { FieldValues } from "react-hook-form"
 
-export const getAllProduct = async () => {
+export const getAllProduct = async ({ search, category, location }: { search?: string; category?: string; location?: string } = {}) => {
     try {
-        // const query = new URLSearchParams({
-        //     search: searchTerm, 
-        // }).toString();
+        const params = new URLSearchParams();
+        if (search) params.append("searchTerm", search);
+        if (category) params.append("category", category);
+        if (location) params.append("location", location);
 
-        const url = `${process.env.SERVER_URL}/listings`;
+        const url = `${process.env.SERVER_URL}/listings?${params.toString()}`;
+        console.log("Generated URL:", url); // Debugging line
 
         const res = await fetch(url, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-            next: {
-                tags: ["product"],
-            },
             cache: "no-store",
+            // Only use `next` if in a Next.js Server Action
+             next: { tags: ["product"] },
         });
 
-        // Check if response is okay
         if (!res.ok) {
             throw new Error(`Failed to fetch products: ${res.statusText}`);
         }
 
-        const data = await res.json();
-        return data;
+        return await res.json();
     } catch (error) {
         console.error("Error fetching products:", error);
-        throw error; // Ensure the error propagates
+        throw error;
     }
 };
+
 
 
 

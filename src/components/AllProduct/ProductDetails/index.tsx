@@ -30,7 +30,7 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
       </div>
       <div className="bg-white rounded-md p-4 border">
         <h2 className="font-bold text-xl">{product?.data.title}</h2>
-        <p className="text-gray-400 mb-4 border-b">Posted on and location</p>
+        <p className="text-gray-400 mb-4 border-b">posted on {product?.data.createdAt.slice(0, 10)}, {product?.data.location}</p>
         <p className="flex gap-2 items-center text-gray-400"><PhoneCall className="bg-[#10b981] text-white size-8 rounded-full "/>  {product?.data.userID.phone_number }</p>
         <p className="flex items-center mt-5 gap-2"><MessageCircle className="bg-[#10b981] text-white size-8  rounded-full p-1"/> Chat</p>
         <div className="flex items-center justify-between my-5 text-gray-500 text-xs">

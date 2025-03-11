@@ -1,12 +1,54 @@
 "use client";
+import Swal from "sweetalert2";
 import { IProduct } from '@/Types/products';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../card';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../button';
 import { Heart } from 'lucide-react';
+import { getSingleProduct } from "@/Service/Products";
+import { createWishlist } from "@/Service/Wishlist";
+import { toast } from "sonner";
+import { useUser } from "@/Context/userContext";
+import { redirect } from "next/navigation";
 const ProductCard = ({ product }: { product: IProduct }) => {
   //! perform the redux operation for adding product to cart
+  const user=useUser()
+  const handelAddToWishList = async (id: string) => {
+    
+    const product=await getSingleProduct(id)
+    if (!user?.user) {
+      toast.error("User ID is missing");
+      redirect("/login");
+      return;
+    }
+    const payload={products:product?.data._id,userID:user.user._id}
+    console.log(payload);
+    Swal.fire({
+      title: "Add to Wishlist?",
+      text: "Do you want to add this product to your wishlist?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, add it!",
+      cancelButtonText: "No, cancel"
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        // Add your wishlist logic here
+        const res=await createWishlist(payload)
+        console.log(res);
+        if(res.status===200){
+          toast.success(res.message)
+        }
+        else{
+          toast.error(res.message)
+        }
+      }
+    });
+    
+    console.log(id);
+  }
   return (
     <div
     >
@@ -59,9 +101,10 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             Buy Now
           </Button>
           <Button
+          onClick={()=>handelAddToWishList(product?._id)}
             variant="outline"
             size="sm"
-            className="w-8 h-8 p-0 flex items-center justify-center rounded-full"
+            className="w-8 h-8 p-0 flex items-center justify-center rounded-full cursor-pointer"
           >
             <Heart />
           </Button>

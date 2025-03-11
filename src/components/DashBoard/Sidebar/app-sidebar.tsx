@@ -1,5 +1,5 @@
 "use client"
-
+ import { UserIcon } from "lucide-react"
 import * as React from "react"
 import {
   AudioWaveform,
@@ -24,84 +24,148 @@ import { NavUser } from "./nav-user"
 import { useUser } from "@/Context/userContext"
 
 // This is sample data.
-const data = {
- 
-  teams: [
-    {
-      name: "ReShopp;.",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Product Management",
-      url: "",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "Products",
-          url: "/user/dashboard/products",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Transaction",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Purchases History",
-          url: "#",
-        },
-        {
-          title: "Sales History",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Wishlist",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Saved Product",
-          url: "#",
-        },
-      ],
-    },
-   
-  ],
- 
-}
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const user=useUser()
+  const user=useUser()
+  const data = {
+    teams: [
+      {
+        name: "ReShopp;.",
+        logo: GalleryVerticalEnd,
+        plan: "Enterprise",
+      },
+      {
+        name: "Acme Corp.",
+        logo: AudioWaveform,
+        plan: "Startup",
+      },
+      {
+        name: "Evil Corp.",
+        logo: Command,
+        plan: "Free",
+      },
+    ],
+    navMain: [
+      {
+        title: "Product Management",
+        url: "",
+        icon: SquareTerminal,
+        isActive: true,
+        items: [
+          {
+            title: "Products",
+            url: `/${user.user?.role}/dashboard/products`,
+          },
+          {
+            title: "Starred",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Transaction",
+        url: "#",
+        icon: Bot,
+        items: [
+          {
+            title: "Purchases History",
+            url: "#",
+          },
+          {
+            title: "Sales History",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Wishlist",
+        url: "#",
+        icon: BookOpen,
+        items: [
+          {
+            title: "Saved Product",
+            url: `/${user.user?.role}/dashboard/wishlist`,
+          },
+        ],
+      },
+     
+    ],
+   
+  }
+  const Admindata = {
+    teams: [
+      {
+        name: "ReShopp;.",
+        logo: GalleryVerticalEnd,
+        plan: "Enterprise",
+      },
+      {
+        name: "Acme Corp.",
+        logo: AudioWaveform,
+        plan: "Startup",
+      },
+      {
+        name: "Evil Corp.",
+        logo: Command,
+        plan: "Free",
+      },
+    ],
+    navMain: [
+      {
+        title: "Product Management",
+        url: "",
+        icon: SquareTerminal,
+        isActive: true,
+        items: [
+          {
+            title: "Products",
+            url: `/${user.user?.role}/dashboard/products`,
+          },
+          {
+            title: "Categories",
+            url: `/${user.user?.role}/dashboard/categories`,
+          },
+        ],
+      },
+      {
+        title: "Users",
+        url: "#",
+        icon: UserIcon,
+        items: [
+          {
+            title: "Users",
+            url: `/${user.user?.role}/dashboard/users`,
+          },
+        ],
+      },
+      {
+        title: "Transactions",
+        url: "#",
+        icon: BookOpen,
+        items: [
+          {
+            title: "Saved Product",
+            url: "#",
+          },
+        ],
+      },
+     
+    ],
+   
+  }
+
     return (
     <Sidebar collapsible="icon" {...props}>
+      
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-
+        {user.user?.role==="admin"?<NavMain items={Admindata.navMain} />:
+  <NavMain items={data.navMain} />
+        }
+        
       </SidebarContent>
       <SidebarFooter>
         {user.user && <NavUser user={user.user} />}

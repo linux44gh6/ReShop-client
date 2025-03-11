@@ -8,11 +8,13 @@ import {
 import { locations } from "@/Constans/location";
 
   
-const LocationMenu = () => {
-
+interface LocationMenuProps {
+    setLocation: (location: string) => void;
+}
+const LocationMenu: React.FC<LocationMenuProps> = ({ setLocation }) => {
     return (
         <div>
-            <Select>
+            <Select onValueChange={(e) => setLocation(e)}>
                 <SelectTrigger className="w-[280px] rounded-full">
                     <SelectValue placeholder="Choose a location" />
                 </SelectTrigger>
