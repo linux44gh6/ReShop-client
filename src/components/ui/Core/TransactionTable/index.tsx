@@ -19,7 +19,6 @@ import { toast } from "sonner";
 import { deleteTransaction } from "@/Service/Transaction";
 
 export function TransactionTable({ data }: { data: any }) {
-
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);

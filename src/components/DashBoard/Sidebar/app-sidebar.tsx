@@ -100,16 +100,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         logo: GalleryVerticalEnd,
         plan: "Enterprise",
       },
-      {
-        name: "Acme Corp.",
-        logo: AudioWaveform,
-        plan: "Startup",
-      },
-      {
-        name: "Evil Corp.",
-        logo: Command,
-        plan: "Free",
-      },
     ],
     navMain: [
       {
@@ -145,8 +135,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: BookOpen,
         items: [
           {
-            title: "Saved Product",
-            url: "#",
+            title: "All Transactions",
+            url: `/${user.user?.role}/dashboard/transactions`,
           },
         ],
       },

@@ -8,7 +8,6 @@ export const getAllTransaction = async () => {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            Authorization: (await cookies()).get("accessToken")?.value || ""
         },
         next: {
             tags: ["transaction"]
@@ -24,7 +23,6 @@ export const getSingleTransaction = async (id: string) => {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            Authorization: (await cookies()).get("accessToken")?.value || ""
         },
         next: {
             tags: ["transaction"]
