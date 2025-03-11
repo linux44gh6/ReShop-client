@@ -1,5 +1,5 @@
 export interface IWishlist {
-   _id: string;
+   _id?: string;
    products:{
        _id: string;
        title: string;

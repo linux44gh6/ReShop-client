@@ -1,9 +1,28 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/Context/userContext";
+import { createTransaction } from "@/Service/Transaction";
 import { IProduct } from "@/Types/products";
 import { MessageCircle, PhoneCall } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
 const ProductDetails = ({ product }: { product: IProduct }) => {
+  
+  const {user}=useUser()
+  console.log(user);
+  const handleToBuy = async(data: IProduct) => {
+    const toastId = toast.loading("Loading...");
+    const transactionData={buyerID:user?._id,itemID:data._id,sellerID:data?.userID?._id,status:"completed"}
+    console.log(transactionData);
+    const res=await createTransaction(transactionData)
+    console.log(res);
+    if(res.status===200){
+      toast.success(res.message,{id:toastId})
+    }else{
+      toast.error(res.message,{id:toastId})
+    }
+  }
   return (
    <div>
      <div className="grid grid-cols-2  border border-white p-4 rounded-md my-5 shadow-sm">
@@ -49,7 +68,9 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
           
         </p>
         <hr />
-        <Button  className="w-full">Buy Now</Button>
+        <Button onClick={() => handleToBuy(product?.data)}  className="w-full cursor-pointer">
+            Buy Now
+          </Button>
       </div>
       
     </div>

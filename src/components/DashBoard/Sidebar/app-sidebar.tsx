@@ -69,8 +69,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Bot,
         items: [
           {
-            title: "Purchases History",
-            url: "#",
+            title: "Transaction History",
+            url: `/${user.user?.role}/dashboard/transactions`,
           },
           {
             title: "Sales History",

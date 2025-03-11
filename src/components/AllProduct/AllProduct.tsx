@@ -1,19 +1,23 @@
 "use client";
-import { IProduct } from "@/Types/products";
+import { IProduct, IProductResponse } from "@/Types/products";
 import FilterSidebar from "./FilterSidebar/FilterSidebar";
 import ProductCard from "../ui/Core/ProductCard";
 import Container from "../ui/Core/Container";
 import { ICategory } from "@/Types/category";
 import { useEffect, useState } from "react";
-
+import Image from "next/image";
+import notFound from "@/assets/notFound.svg"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import LocationMenu from "../LocationMenu/LocationMenu";
 import { getAllProduct } from "@/Service/Products";
 import Spinner from "../Loading/Loading";
+import { useSearchParams } from "next/navigation";
 
-const AllProducts = ({Category}:{Category:ICategory[]}) => {
-    const [products, setProducts] = useState<IProduct[]>([]); 
-    const [selectedCategory, setSelectedCategory] = useState<string>(""); 
+const AllProducts = ({ Category }: { Category: ICategory[] }) => {
+    const searchParams = useSearchParams();
+    const categoryIdFromUrl = searchParams.get("categoryId");
+    const [products, setProducts] = useState<IProductResponse[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [Search, setSearch] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const [ProductLocation, setLocation] = useState<string>("");
@@ -26,19 +30,20 @@ const AllProducts = ({Category}:{Category:ICategory[]}) => {
             //     searchTerm: Search
             // };
             const fetchedProducts = await getAllProduct({
-                 search: Search,
-                 category: selectedCategory,
-                  location: ProductLocation }); 
-            setProducts(fetchedProducts); 
+                search: Search,
+                category: selectedCategory || categoryIdFromUrl || undefined,
+                location: ProductLocation
+            });
+            setProducts(fetchedProducts);
             setLoading(false);
         };
 
         fetchProducts();
-    }, [selectedCategory, Search, ProductLocation]); // Re-fetch when category or search changes
+    }, [selectedCategory, Search, ProductLocation, categoryIdFromUrl]); // Re-fetch when category or search changes
 
     if (loading) {
         return (
-            <Spinner/>
+            <Spinner />
         )
     }
     return (
@@ -46,7 +51,7 @@ const AllProducts = ({Category}:{Category:ICategory[]}) => {
             <div className="flex justify-between items-center mt-10">
                 <div>
                     <h1 className="text-xl font-bold">Location</h1>
-                    <LocationMenu setLocation={setLocation}/>
+                    <LocationMenu setLocation={setLocation} />
                 </div>
                 <div>
                     <h1 className="text-xl font-bold">Category</h1>
@@ -75,11 +80,18 @@ const AllProducts = ({Category}:{Category:ICategory[]}) => {
                 <div>
                     <FilterSidebar />
                 </div>
-                <div className="grid grid-cols-4 gap-8">
-                    {products?.data.map((product: IProduct, idx: number) => (
-                        <ProductCard key={idx} product={product} />
-                    ))}
+                <div className="grid grid-cols-3 gap-4">
+                    {products?.data.length > 0 ? (
+                        products.data.map((product: IProduct, idx: number) => (
+                            <ProductCard key={idx} product={product} />
+                        ))
+                    ) : (
+                        <div className="w-full">
+                            <Image src={notFound} width={500} height={500} alt="not found" className=" mx-auto" />
+                        </div>
+                    )}
                 </div>
+
             </div>
         </Container>
     );

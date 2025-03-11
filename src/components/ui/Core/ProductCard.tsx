@@ -23,7 +23,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
       return;
     }
     const payload={products:product?.data._id,userID:user.user._id}
-    console.log(payload);
+
     Swal.fire({
       title: "Add to Wishlist?",
       text: "Do you want to add this product to your wishlist?",
@@ -62,7 +62,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           width={500}
           height={500}
           alt="product image"
-          className="rounded-sm h-48 object-cover"
+          className="rounded-sm h-48  "
         />
       </CardHeader>
 
@@ -74,20 +74,14 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           >
             {product?.title.length > 30
               ? product?.title?.slice(0, 30) + "..."
-              : product?.title}
+              : product?.title?.slice(0, 20)+".." } 
           </CardTitle>
         </Link>
        
         <div className="flex items-center justify-between my-2">
           <p className="text-sm text-gray-600">
-           
               <span className="font-semibold">$ {product?.price}</span>
-
           </p>
-
-          <div className="flex items-center justify-center gap-1">
-          
-          </div>
         </div>
       </CardContent>
 
