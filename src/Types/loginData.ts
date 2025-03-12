@@ -13,5 +13,5 @@ export interface IUser{
     role: string;
     status: string;
     isBlocked: boolean;
-    image:string
+    profileImg:string
 }

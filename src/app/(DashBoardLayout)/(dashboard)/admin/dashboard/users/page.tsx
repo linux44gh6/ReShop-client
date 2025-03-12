@@ -6,7 +6,7 @@ const UserPage = async() => {
     console.log(users,"form suer");
     return (
         <div>
-                 <UserTable data={users}/>
+             <UserTable data={users}/>
         </div>
     );
 };

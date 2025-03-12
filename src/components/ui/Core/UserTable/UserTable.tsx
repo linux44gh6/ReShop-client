@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import {
     Table,
@@ -16,9 +17,9 @@ import DeleteConfirmationModal from "../Modal/Modal";
 import { deleteProduct } from "@/Service/Products";
 import { toast } from "sonner";
 import { IUser } from "@/Types/loginData";
-import CreateCategoryModal from "../CategoryTable/CreateCategoryModal";
 
-export function UserTable({ data }: { data: IUser[] }) {
+
+export function UserTable({ data }: { data: any }) {
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -58,11 +59,11 @@ export function UserTable({ data }: { data: IUser[] }) {
                         <TableRow key={product?._id}>
                             <TableCell className="font-medium">
                                 <Image
-                                    src={product?.image}
+                                    src={product?.profileImg||"https://res.cloudinary.com/da1t0c7he/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1741626833/vac89dpcaj5rw96e7maq.webp"}
                                     alt="Image"
                                     width={50}
                                     height={50}
-                                    className="rounded-md"
+                                    className="rounded-full"
                                 />
                             </TableCell>
                             <TableCell className="text-sm">{product?.name}</TableCell>
@@ -92,7 +93,7 @@ export function UserTable({ data }: { data: IUser[] }) {
                 name={selectedItem}
                 onConfirm={handleDelete}
             />
-            <CreateCategoryModal />
+           
         </div>
     );
 }

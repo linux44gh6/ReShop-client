@@ -7,9 +7,9 @@ const Banner = () => {
     <div
       className=" container mx-auto border-2 border-[#10b981]  p-4 rounded-3xl mt-10 "
     >
-      <div className="grid grid-cols-2 gap-4 items-center">
-        <div className="pl-12">
-          <h1 className="text-4xl font-bold leading-normal">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 items-center p-1 md:p-0 lg:p-0">
+        <div className="pl-0 md:pl-12 lg:pl-12">
+          <h1 className="text-xl md:text-4xl lg:text-4xl font-bold leading-normal">
           Grab exclusive discounts and massive savings before they’re gone!
           </h1>
           <p className="my-3">
@@ -17,7 +17,8 @@ const Banner = () => {
             essentials, fashion, and more! Limited stock.
           </p>
 
-          <Button className="rounded-full mr-2 cursor-pointer">Buy Now</Button>
+          <Link href={'/all-product'}>
+          <Button className="rounded-full mr-2 cursor-pointer">Buy Now</Button></Link>
           <Link href={'/all-product'}>
           <Button className="rounded-full cursor-pointer" variant="outline">
             All Products

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FcGoogle } from "react-icons/fc";
-import { FaMicrosoft } from "react-icons/fa";
+import { FaGithub,  } from "react-icons/fa";
 import Image from "next/image";
 import logIn from "@/assets/LoginImage.jpg"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../form";
@@ -15,8 +15,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/Context/userContext";
-
-
+import { signIn } from 'next-auth/react';
 export default function LoginForm() {
     const router=useRouter()
     const {setIsLoading}=useUser()
@@ -41,6 +40,17 @@ export default function LoginForm() {
       } catch (error) {
         console.log(error)
       }
+    }
+
+    const handleGoogleLogin = async()=>{
+
+        try{
+            await signIn("google", {
+                callbackUrl:'http://localhost/3000',
+            });
+        }catch(error){
+            console.log(error);
+        }
     }
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -106,11 +116,17 @@ export default function LoginForm() {
 
                             {/* Social Login */}
                             <div className="flex flex-col gap-2">
-                                <Button variant="outline" className="flex items-center gap-2 w-full">
+                                <Button
+                                onClick={() => handleGoogleLogin()}
+                                variant="outline" className="flex items-center gap-2 w-full">
                                     <FcGoogle className="text-red-500" /> Sign in with Google
                                 </Button>
-                                <Button variant="outline" className="flex items-center gap-2 w-full">
-                                    <FaMicrosoft className="text-blue-600" /> Sign in with Microsoft
+                                <Button
+                                onClick={()=>signIn('github',{
+                                    callbackUrl: 'http://localhost:3000'
+                                })}
+                                variant="outline" className="flex items-center gap-2 w-full">
+                                    <FaGithub className="text-blue-600" /> Sign in with Github
                                 </Button>
                             </div>
                         </div>

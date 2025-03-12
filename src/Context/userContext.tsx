@@ -24,7 +24,7 @@ const ContextProvider = ({children}:{children: React.ReactNode}) => {
         handleUser()
     },[isLoading])
     return (
-        <UserContext.Provider value={{user,isLoading,setUser,setIsLoading}} >
+        <UserContext.Provider value={{name: user?.name, user, isLoading, setUser, setIsLoading}} >
             {children}
         </UserContext.Provider>
     );

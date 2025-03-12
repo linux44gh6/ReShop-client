@@ -52,7 +52,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   return (
     <div
     >
-        <Card className="p-3">
+        <Card className="p-3 hover:shadow-xl">
       <CardHeader className="relative p-0 h-48">
         <Image
           src={
@@ -87,13 +87,14 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
       <CardFooter className="block p-0">
         <div className="flex gap-2 items-center justify-between">
-          <Button
+         <Link href={`/all-product/${product._id}`}>
+         <Button
             size="sm"
 
             className="w-32 rounded-full"
           >
             Buy Now
-          </Button>
+          </Button></Link>
           <Button
           onClick={()=>handelAddToWishList(product?._id)}
             variant="outline"

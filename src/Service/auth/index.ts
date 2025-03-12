@@ -28,6 +28,7 @@ export const logOut=async()=>{
   (await cookies()).delete("accessToken")
 }
 export const getUser=async():Promise<IUser|null>=>{
+  
   const token=(await cookies()).get("accessToken")?.value
   if(token){
     const decodedUser=jwtDecode(token) as IUser
