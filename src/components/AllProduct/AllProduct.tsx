@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { IProduct, IProductResponse } from "@/Types/products";
+import { IProduct } from "@/Types/products";
 import FilterSidebar from "./FilterSidebar/FilterSidebar";
 import ProductCard from "../ui/Core/ProductCard";
 import Container from "../ui/Core/Container";
@@ -13,10 +14,10 @@ import { getAllProduct } from "@/Service/Products";
 import Spinner from "../Loading/Loading";
 import { useSearchParams } from "next/navigation";
 
-const AllProducts = ({ Category }: { Category: ICategory[] }) => {
+const AllProducts = ({ Category }: { Category: any }) => {
     const searchParams = useSearchParams();
     const categoryIdFromUrl = searchParams.get("categoryId");
-    const [products, setProducts] = useState<IProductResponse[]>([]);
+    const [products, setProducts] = useState<any>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [Search, setSearch] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);

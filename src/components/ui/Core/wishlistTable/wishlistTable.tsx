@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import {
     Table,
@@ -15,21 +16,19 @@ import { useState } from "react";
 import DeleteConfirmationModal from "../Modal/Modal";
 import { deleteProduct } from "@/Service/Products";
 import { toast } from "sonner";
-import { IUser } from "@/Types/loginData";
 import CreateCategoryModal from "../CategoryTable/CreateCategoryModal";
 import { IWishlist } from "@/Types/wishlist";
 
-export function WishlistTable({ data }: { data: IUser[] }) {
+export function WishlistTable({ data }: { data:any }) {
     const [isModalOpen, setModalOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
     console.log(data);
-    const handleOpenModal = (id: string, item: string) => {
+    const handleOpenModal = (id:any, item: string) => {
         setModalOpen(true);
         setSelectedId(id);
         setSelectedItem(item);
-    };
-    console.log(data);
+    };;
     const handleDelete = async () => {
         if (selectedId) {
             const res = await deleteProduct(selectedId);
@@ -57,11 +56,11 @@ export function WishlistTable({ data }: { data: IUser[] }) {
                 </TableHeader>
                 <TableBody>
                     {data?.data.map((product: IWishlist) => (
-                        console.log(product),
+                        console.log(product,"product"),
                         <TableRow key={product?._id}>
                             <TableCell className="font-medium">
                                 <Image
-                                    src={product?.products.images[0]}
+                                    src={product?.products.images[0]||"https://res.cloudinary.com/da1t0c7he/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1741626833/vac89dpcaj5rw96e7maq.webp"}
                                     alt="Image"
                                     width={50}
                                     height={50}

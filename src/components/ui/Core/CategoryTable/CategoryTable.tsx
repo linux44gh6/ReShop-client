@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import {
@@ -17,8 +18,7 @@ import DeleteConfirmationModal from "../Modal/Modal";
 import { deleteProduct } from "@/Service/Products";
 import { toast } from "sonner";
 
-import { ICategory } from "@/Types/category";
-export function CategoryTable({ data }: { data:ICategory[]}) {
+export function CategoryTable({ data }: { data:any}) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -52,7 +52,7 @@ export function CategoryTable({ data }: { data:ICategory[]}) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.data.map((product) => (
+          {data?.data.map((product:any) => (
             <TableRow key={product?._id}>
               <TableCell className="font-medium">
                 <Image
