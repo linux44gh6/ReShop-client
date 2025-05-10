@@ -1,108 +1,243 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { useUser } from "@/Context/userContext";
-import { createTransaction } from "@/Service/Transaction";
-import { IProduct } from "@/Types/products";
-import { MessageCircle, PhoneCall } from "lucide-react";
-import Image from "next/image";
-import { toast } from "sonner";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client"
+import { Button } from "@/components/ui/button"
+import { useUser } from "@/Context/userContext"
+import { createTransaction } from "@/Service/Transaction"
+import type { IProduct } from "@/Types/products"
+import { Badge } from "@/components/ui/badge"
+import { Heart, MessageCircle, PhoneCall, Share2, ShieldCheck, Star, Truck } from "lucide-react"
+import Image from "next/image"
+import { toast } from "sonner"
+import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
+import { getAllProduct } from "@/Service/Products"
+import ProductCard from "@/components/ui/Core/ProductCard"
 
 const ProductDetails = ({ product }: { product: IProduct }) => {
-  const { user } = useUser();
+  const [products,setProducts]=useState<IProduct[]>([])
+  const { user } = useUser()
+  const [selectedImage, setSelectedImage] = useState(product?.data.images[0])
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    const Products = async () => {
+      const res = await getAllProduct()
+      setProducts(res.data)
+    }
+    Products()
+  }, [])
 
   const handleToBuy = async (data: IProduct) => {
-    const toastId = toast.loading("Loading...");
+    setIsLoading(true)
+    const toastId = toast.loading("Processing your purchase...")
+
     const transactionData = {
       buyerID: user?._id,
       itemID: data._id,
       sellerID: data?.userID?._id,
       status: "completed",
-    };
-
-    const res = await createTransaction(transactionData);
-    if (res.status === 200) {
-      toast.success(res.message, { id: toastId });
-    } else {
-      toast.error(res.message, { id: toastId });
     }
-  };
+
+    try {
+      const res = await createTransaction(transactionData)
+      if (res.status === 200) {
+        toast.success(res.message, { id: toastId })
+      } else {
+        toast.error(res.message, { id: toastId })
+      }
+    } catch (error) {
+      toast.error("An error occurred", { id: toastId })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Format date to be more readable
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }
 
   return (
-    <div className="p-4">
-      {/* Responsive Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 border border-white p-4 rounded-md my-5 shadow-sm gap-6">
-        
+    <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
+      {/* Breadcrumb */}
+      <div className="text-sm text-gray-500 mb-6">
+        Home / {product?.category?.name} / {product?.data.title}
+      </div>
+
+      {/* Main Product Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Left - Product Images */}
-        <div className="border rounded-md">
-          <Image
-            src={product?.data.images[0]}
-            alt="product image"
-            width={200}
-            height={200}
-            className="rounded-md w-full md:w-9/12 object-cover mx-auto"
-          />
-          {/* Small Image Thumbnails */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5 border-t pt-2">
-            {product?.data.images.map((image: string, idx: number) => (
+        <div className="space-y-4">
+          {/* Main Image */}
+          <div className="relative bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+            <div className="aspect-square relative">
               <Image
-                key={idx}
-                src={image}
-                alt="product image"
-                width={500}
-                height={500}
-                className="rounded-2xl w-full object-cover shadow-2xl p-3"
+                src={selectedImage || product?.data.images[0]}
+                alt={product?.data.title}
+                fill
+                className="object-contain p-4"
               />
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-4 right-4 bg-white/80 hover:bg-white rounded-full h-8 w-8 shadow-sm"
+            >
+              <Heart className="h-5 w-5 text-gray-600 hover:text-red-500 transition-colors" />
+              <span className="sr-only">Add to favorites</span>
+            </Button>
+          </div>
+
+          {/* Image Gallery */}
+          <div className="grid grid-cols-4 gap-2">
+            {product?.data.images.map((image: string, idx: number) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedImage(image)}
+                className={cn(
+                  "relative rounded-lg overflow-hidden border-2 aspect-square",
+                  selectedImage === image
+                    ? "border-[#10b981] ring-2 ring-[#10b981]/20"
+                    : "border-gray-200 hover:border-[#10b981]/50",
+                )}
+              >
+                <Image
+                  src={image || "/placeholder.svg"}
+                  alt={`Product view ${idx + 1}`}
+                  fill
+                  className="object-cover transition-all hover:scale-105"
+                />
+              </button>
             ))}
           </div>
         </div>
 
         {/* Right - Product Details */}
-        <div className="bg-white rounded-md p-4 border">
-          <h2 className="font-bold text-xl">{product?.data.title}</h2>
-          <p className="text-gray-400 mb-4 border-b">
-            posted on {product?.data.createdAt.slice(0, 10)}, {product?.data.location}
-          </p>
+        <div className="space-y-6">
+          <div>
+            <div className="flex items-center justify-between">
+              <Badge variant="outline" className="bg-emerald-50 text-[#10b981] border-emerald-200 mb-2">
+                {product?.data.condition || "Used - Like New"}
+              </Badge>
+              <Button variant="ghost" size="sm" className="text-gray-500 flex items-center gap-1">
+                <Share2 className="h-4 w-4" /> Share
+              </Button>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{product?.data.title}</h1>
+            <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+              <span>Posted {formatDate(product?.data.createdAt)}</span>
+              <span>•</span>
+              <span>{product?.data.location}</span>
+            </div>
 
-          {/* Contact Section */}
-          <p className="flex flex-wrap gap-2 items-center text-gray-400">
-            <PhoneCall className="bg-[#10b981] text-white size-8 rounded-full" />
-            {product?.data.userID.phone_number}
-          </p>
-          <p className="flex items-center mt-5 gap-2">
-            <MessageCircle className="bg-[#10b981] text-white size-8 rounded-full p-1" />
-            Chat
-          </p>
+            {/* Price */}
+            <div className="flex items-baseline gap-2 mb-4">
+              <span className="text-3xl font-bold text-gray-900">${product?.data.price}</span>
+              {product?.data.originalPrice && (
+                <span className="text-lg text-gray-500 line-through">${product?.data.originalPrice}</span>
+              )}
+            </div>
+          </div>
 
           {/* Product Meta Information */}
-          <div className="flex flex-wrap items-center justify-between my-5 text-gray-500 text-xs">
-            <p className="rounded-full px-4 py-1 bg-teal-100">
-              Brand: {product?.category?.name}
-            </p>
-            <p className="rounded-full px-4 py-1 bg-teal-100">
-              Category: {product?.data.category?.name}
-            </p>
+          <div className="grid grid-cols-2 gap-3 py-4 border-t border-b border-gray-100">
+            <div className="flex items-center gap-2">
+              <div className="bg-emerald-50 p-2 rounded-full">
+                <Star className="h-4 w-4 text-[#10b981]" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Brand</p>
+                <p className="text-sm text-gray-500">{product?.category?.name || "Unknown"}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="bg-emerald-50 p-2 rounded-full">
+                <Truck className="h-4 w-4 text-[#10b981]" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Category</p>
+                <p className="text-sm text-gray-500">{product?.data.category?.name || "Uncategorized"}</p>
+              </div>
+            </div>
           </div>
-          <hr />
 
-          {/* Price */}
-          <p className="my-2 font-bold">
-            <span className="font-semibold">$ {product?.data.price}</span>
-          </p>
-          <hr />
+          {/* Seller Information */}
+          <div className="bg-gray-50 rounded-xl p-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-12 w-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                {product?.data.userID.name?.charAt(0) || "S"}
+              </div>
+              <div>
+                <p className="font-medium">{product?.data.userID.name || "Seller"}</p>
+                <p className="text-sm text-gray-500">Seller</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 bg-white hover:bg-emerald-50 border-gray-200"
+              >
+                <PhoneCall className="h-4 w-4 text-[#10b981]" />
+                {product?.data.userID.phone_number}
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 bg-white hover:bg-emerald-50 border-gray-200"
+              >
+                <MessageCircle className="h-4 w-4 text-[#10b981]" />
+                Chat with Seller
+              </Button>
+            </div>
+          </div>
 
           {/* Buy Button */}
-          <Button onClick={() => handleToBuy(product?.data)} className="w-full cursor-pointer">
-            Buy Now
+          <Button
+            onClick={() => handleToBuy(product?.data)}
+            disabled={isLoading}
+            className="w-full h-12 text-lg bg-[#10b981] hover:bg-emerald-700 transition-colors"
+          >
+            {isLoading ? "Processing..." : "Buy Now"}
           </Button>
+
+          {/* Trust Badges */}
+          <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+            <ShieldCheck className="h-4 w-4 text-[#10b981]" />
+            <span>Secure Transaction</span>
+          </div>
         </div>
       </div>
 
       {/* Product Description */}
-      <div className="mt-5">
-        <h1 className="font-bold text-3xl">Description</h1>
-        <p className="ms-5 mt-3">{product?.data.description}</p>
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-8">
+        <h2 className="text-xl font-bold mb-4">Product Description</h2>
+        <div className="prose max-w-none text-gray-700">
+          <p>{product?.data.description}</p>
+        </div>
+      </div>
+
+      {/* Similar Products Section (placeholder) */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">Similar Products</h2>
+          <Button variant="link" className="text-[#10b981]">
+            View All
+          </Button>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {products.slice(0, 4).map((item) => (
+           <ProductCard key={item._id} product={item} />
+          ))}
+        </div>
       </div>
     </div>
-  );
-};
-export default ProductDetails;
+  )
+}
+
+export default ProductDetails

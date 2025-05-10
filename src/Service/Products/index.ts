@@ -19,7 +19,7 @@ export const getAllProduct = async ({ search, category, location }: { search?: s
                 "Content-Type": "application/json",
             },
             cache: "no-store",
-            // Only use `next` if in a Next.js Server Action
+            
              next: { tags: ["product"] },
         });
 
