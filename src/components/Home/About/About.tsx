@@ -12,11 +12,11 @@ export function AboutUsSection() {
             <div className="relative">
               <div className="rounded-xl overflow-hidden shadow-lg">
                 <Image
-                  src="/placeholder.svg?height=600&width=800"
+                  src="/about.svg"
                   alt="About ReShop"
                   width={800}
                   height={600}
-                  className="w-full h-auto object-cover"
+                  className="w-full h-auto object-cover border border-[#10b981]"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg hidden md:block">

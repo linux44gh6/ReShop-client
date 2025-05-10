@@ -53,7 +53,7 @@ export function JoinCommunitySection() {
           <div className="relative">
             <div className="rounded-xl overflow-hidden shadow-lg">
               <Image
-                src="/placeholder.svg?height=600&width=800"
+                src="/Comunity.svg"
                 alt="ReShop Community"
                 width={800}
                 height={600}
