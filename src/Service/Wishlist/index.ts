@@ -12,7 +12,8 @@ export const getWishlist = async (id:string) => {
         },
         next: {
             tags: ["wishlist"],
-        }
+        },
+        cache:"no-cache"
     })
 
     const data = await res.json()
@@ -27,8 +28,8 @@ export const createWishlist = async ( payload:IWishlist) => {
         },
         body: JSON.stringify(payload),
     })
-    revalidateTag("wishlist")
     const data = await res.json()
+    revalidateTag("wishlist")
     return data
 }
 
@@ -39,7 +40,7 @@ export const deleteWishlist = async (id:string) => {
             "Content-Type": "application/json",
         },
     })
-    revalidateTag("wishlist")
     const data = await res.json()
+    revalidateTag("wishlist")
     return data
 }

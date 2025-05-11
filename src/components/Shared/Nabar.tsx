@@ -20,16 +20,16 @@ import { useEffect, useState } from "react"
 import { getWishlist } from "@/Service/Wishlist"
 
 export default function Navbar() {
-  const { user, isLoading, setUser } = useUser()
+  const { user, isLoading, setUser,setIsLoading } = useUser()
   const [wishlistCount, setWishlistCount] = useState(0)
- console.log(user?._id);
   useEffect(()=>{
     const fetchWishlistCount = async () => {
+      setIsLoading(true)
       const result=await getWishlist(user?._id as string)
       setWishlistCount(result?.data?.length)
     }
     fetchWishlistCount()
-  },[user?._id])
+  },[user?._id, setIsLoading])
   // This would be replaced with actual cart data
   const cartItemCount = wishlistCount
 
@@ -77,7 +77,8 @@ export default function Navbar() {
             <span className="sr-only">Messages</span>
           </Button>
 
-          <Link href="/wishlist" className="relative">
+        {user?.role==='user' &&
+          <Link href={`/${user.role}/dashboard/wishlist`} className="relative">
             <Button
               variant="ghost"
               size="icon"
@@ -92,6 +93,8 @@ export default function Navbar() {
               </span>
             )}
           </Link>
+
+        }
 
           {user ? (
             <div className="flex gap-2 items-center">

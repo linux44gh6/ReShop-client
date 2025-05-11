@@ -13,6 +13,7 @@ import { useUser } from "@/Context/userContext"
 import { redirect } from "next/navigation"
 
 const ProductCard = ({ product }: { product: IProduct }) => {
+  console.log(product);
   //! perform the redux operation for adding product to cart
   const user = useUser()
   const handelAddToWishList = async (id: string) => {
@@ -80,6 +81,10 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
           <div className="flex items-center justify-between my-2 mt-auto">
             <p className="text-[#10b981] font-bold">${product?.price}</p>
+            <p className="text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-md text-xs font-medium">{product?.status}</p>
+          </div>
+          <div>
+            
           </div>
         </CardContent>
 

@@ -16,7 +16,6 @@ import { useState } from "react";
 import DeleteConfirmationModal from "../Modal/Modal";
 import { deleteProduct } from "@/Service/Products";
 import { toast } from "sonner";
-import CreateCategoryModal from "../CategoryTable/CreateCategoryModal";
 import { IWishlist } from "@/Types/wishlist";
 
 export function WishlistTable({ data }: { data:any }) {
@@ -94,7 +93,7 @@ export function WishlistTable({ data }: { data:any }) {
                 name={selectedItem}
                 onConfirm={handleDelete}
             />
-            <CreateCategoryModal />
+            {/* <CreateCategoryModal /> */}
         </div>
     );
 }
