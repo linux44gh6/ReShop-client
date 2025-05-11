@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Star } from "lucide-react"
-import Image from "next/image"
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 export function TestimonialsSection() {
   const testimonials = [
     {
@@ -42,16 +41,14 @@ export function TestimonialsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div key={index} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow">
               <div className="flex items-center gap-4 mb-4">
                 <div className="h-14 w-14 rounded-full overflow-hidden">
-                  <Image
-                    src={testimonial.image || "/placeholder.svg"}
-                    alt={testimonial.name}
-                    width={56}
-                    height={56}
-                    className="h-full w-full object-cover"
-                  />
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+
                 </div>
                 <div>
                   <h3 className="font-semibold">{testimonial.name}</h3>

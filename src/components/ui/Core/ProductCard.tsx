@@ -50,8 +50,8 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   }
 
   return (
-    <div className="h-full">
-      <Card className="h-full border border-gray-200 transition-all duration-300 hover:shadow-md hover:border-[#10b981]/30">
+    <div className="">
+      <Card className=" border border-gray-200 transition-all duration-300 hover:shadow-md hover:border-[#10b981]/30">
         <CardHeader className="relative p-0 overflow-hidden">
           <div className="h-48 w-full overflow-hidden">
             <Image

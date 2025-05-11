@@ -4,6 +4,7 @@ import { revalidateTag } from "next/cache"
 
 
 export const getWishlist = async (id:string) => {
+    console.log(id,"from service");
     const res = await fetch(`${process.env.SERVER_URL}/wishlist/user/${id}`, {
         method: "GET",
         headers: {

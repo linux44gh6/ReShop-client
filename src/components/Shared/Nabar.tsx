@@ -16,11 +16,22 @@ import Spinner from "../Loading/Loading"
 import { logOut } from "@/Service/auth"
 import { signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
+import { getWishlist } from "@/Service/Wishlist"
 
 export default function Navbar() {
   const { user, isLoading, setUser } = useUser()
+  const [wishlistCount, setWishlistCount] = useState(0)
+ console.log(user?._id);
+  useEffect(()=>{
+    const fetchWishlistCount = async () => {
+      const result=await getWishlist(user?._id as string)
+      setWishlistCount(result?.data?.length)
+    }
+    fetchWishlistCount()
+  },[user?._id])
   // This would be replaced with actual cart data
-  const cartItemCount = 3
+  const cartItemCount = wishlistCount
 
   if (isLoading) {
     return (
@@ -66,7 +77,7 @@ export default function Navbar() {
             <span className="sr-only">Messages</span>
           </Button>
 
-          <Link href="/cart" className="relative">
+          <Link href="/wishlist" className="relative">
             <Button
               variant="ghost"
               size="icon"
