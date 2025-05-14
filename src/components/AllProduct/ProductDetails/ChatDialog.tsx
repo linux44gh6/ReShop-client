@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { getMessage } from "@/Service/Message"
+import { createMessage, getMessage } from "@/Service/Message"
 import { cn } from "@/lib/utils"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -29,6 +29,7 @@ type Message = {
   text: string
   sender: "user" | "seller"
   createdAt: Date
+  senderRole:string
 }
 
 type PayloadData = {
@@ -48,6 +49,7 @@ type ChatDialogProps = {
 }
 
 export function ChatDialog({ payload }: ChatDialogProps) {
+
   const seller = payload.data.userID
   const { _id, title, sellerAvatar } = payload.data
   const [open, setOpen] = useState(false)
@@ -55,8 +57,8 @@ export function ChatDialog({ payload }: ChatDialogProps) {
   const [newMessage, setNewMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
+  const [buyerId, setBuyerId] = useState("")
   const user=useUser()
-  console.log(user);
   useEffect(() => {
     const fetchMessages = async () => {
       setIsLoading(true)
@@ -64,6 +66,7 @@ export function ChatDialog({ payload }: ChatDialogProps) {
         const result = await getMessage(payload.data._id)
         if (result.data?.message) {
           setMessages(result.data.message)
+          setBuyerId(result.data.buyerId)
         }
       } catch (error) {
         console.error("Error fetching messages:", error)
@@ -77,6 +80,7 @@ export function ChatDialog({ payload }: ChatDialogProps) {
     }
   }, [payload.data._id, open])
 
+  console.log(messages);
   // Scroll to bottom when messages change
   useEffect(() => {
     const scrollContainer = scrollAreaRef.current?.querySelector(
@@ -105,8 +109,9 @@ const form = useForm<z.infer<typeof formSchema>>({
 })
 
 const handleSubmitMessage=async(data:any)=>{
+  setIsLoading(true)
   const messageData={
-    buyerId:user?.user?._id,
+    buyerId,
     message:[
       {
         text:data.message,
@@ -114,7 +119,31 @@ const handleSubmitMessage=async(data:any)=>{
     ],
     productId:_id
   }
-  console.log(messageData);
+  const result=await createMessage(messageData)
+  console.log(result);
+  if(result.status===201){
+    setNewMessage("")
+    form.reset()
+    setIsLoading(false)
+
+     const fetchMessages = async () => {
+      setIsLoading(true)
+      try {
+        const result = await getMessage(payload.data._id)
+        if (result.data?.message) {
+          setMessages(result.data.message)
+          setBuyerId(result.data.buyerId)
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchMessages()
+  }
+  
+  console.log(result);
 }
 
   const formatTime = (date: Date) => {
@@ -150,53 +179,41 @@ const handleSubmitMessage=async(data:any)=>{
             <ScrollArea className="flex-grow w-full h-[50vh]" ref={scrollAreaRef}>
               <div className="p-4 space-y-4">
                 {messages.map((message,idx) => (
-                  <div
-                    key={idx}
-                    className={cn("flex w-full", message.sender === "user" ? "justify-end" : "justify-start")}
-                  >
-                    <div
-                      className={cn(
-                        "flex items-end gap-2 max-w-[85%]",
-                        message.sender === "user" ? "flex-row-reverse" : "flex-row"
-                      )}
-                    >
-                      <Avatar className="h-6 w-6 flex-shrink-0">
-                        {message.sender === "seller" ? (
-                          <>
-                            <AvatarImage src={sellerAvatar || "/placeholder.svg"} alt={seller.name} />
-                            <AvatarFallback className="bg-primary/20 text-primary text-xs">
-                              {seller.name.substring(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                          </>
-                        ) : (
-                          <>
-                            <AvatarImage src="/placeholder.svg" alt="You" />
-                            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                              YOU
-                            </AvatarFallback>
-                          </>
-                        )}
-                      </Avatar>
-                      <div
-                        className={cn(
-                          "px-3 py-2 rounded-lg relative",
-                          message.sender === "user"
-                            ? "bg-primary text-primary-foreground rounded-tr-none"
-                            : "bg-muted rounded-tl-none"
-                        )}
-                      >
-                        <p className="text-sm break-words whitespace-pre-wrap">{message.text}</p>
-                        <p
-                          className={cn(
-                            "text-[10px] mt-1 opacity-70",
-                            message.sender === "user" ? "text-right" : "text-left"
-                          )}
-                        >
-                          {formatTime(message.createdAt)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                 <div key={idx} className="grid grid-cols-2 gap-2 w-full">
+  {message.senderRole === "seller" && (
+    <div className="flex items-end gap-2">
+      <Avatar className="h-6 w-6 flex-shrink-0">
+        <AvatarImage src={sellerAvatar || "/placeholder.svg"} alt={seller.name} />
+        <AvatarFallback className="bg-primary/20 text-primary text-xs">
+          {seller.name.substring(0, 2).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+      <div className="bg-muted px-3 py-2 rounded-lg rounded-tl-none max-w-[85%]">
+        <p className="text-sm break-words whitespace-pre-wrap">{message.text}</p>
+        <p className="text-[10px] mt-1 opacity-70 text-left">
+          {formatTime(message.createdAt)}
+        </p>
+      </div>
+    </div>
+  )}
+
+  {message.senderRole === "buyer" && (
+    <div className="flex items-end justify-end gap-2 col-start-2">
+      <div className="bg-[#10b981] text-primary-foreground px-3 py-2 rounded-lg rounded-tr-none max-w-[85%]">
+        <p className="text-sm break-words whitespace-pre-wrap">{message.text}</p>
+        <p className="text-[10px] mt-1 opacity-70 text-right">
+          {formatTime(message.createdAt)}
+        </p>
+      </div>
+      <Avatar className="h-6 w-6 flex-shrink-0">
+        <AvatarImage src="/placeholder.svg" alt="You" />
+        <AvatarFallback className="bg-[#10b981] text-primary-foreground text-xs">
+          YOU
+        </AvatarFallback>
+      </Avatar>
+    </div>
+  )}
+</div>
                 ))}
               </div>
             </ScrollArea>
