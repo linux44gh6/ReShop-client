@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { getAllProduct } from "@/Service/Products"
 import ProductCard from "@/components/ui/Core/ProductCard"
+import { ChatDialog } from "./ChatDialog"
 
 const ProductDetails = ({ product }: { product: IProduct }) => {
   const [products,setProducts]=useState<IProduct[]>([])
@@ -187,13 +188,14 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
                 <PhoneCall className="h-4 w-4 text-[#10b981]" />
                 {product?.data.userID.phone_number}
               </Button>
-              <Button
+              {/* <Button
                 variant="outline"
                 className="flex items-center gap-2 bg-white hover:bg-emerald-50 border-gray-200"
               >
                 <MessageCircle className="h-4 w-4 text-[#10b981]" />
                 Chat with Seller
-              </Button>
+              </Button> */}
+              <ChatDialog payload={product}/>
             </div>
           </div>
 

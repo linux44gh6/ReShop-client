@@ -29,7 +29,7 @@ export const config = {
     "/user/:path*",
     "/admin/:path*",
     "/all-product/:path*",
-    "/details/:path*",
+    // "/details/:path*",
     "/checkout",
   ],
 };

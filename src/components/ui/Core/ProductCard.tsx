@@ -13,7 +13,6 @@ import { useUser } from "@/Context/userContext"
 import { redirect } from "next/navigation"
 
 const ProductCard = ({ product }: { product: IProduct }) => {
-  console.log(product);
   //! perform the redux operation for adding product to cart
   const user = useUser()
   const handelAddToWishList = async (id: string) => {
@@ -47,7 +46,6 @@ const ProductCard = ({ product }: { product: IProduct }) => {
       }
     })
 
-    console.log(id)
   }
 
   return (
