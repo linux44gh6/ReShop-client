@@ -32,14 +32,12 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
   const handleToBuy = async (data: IProduct) => {
     setIsLoading(true)
     const toastId = toast.loading("Processing your purchase...")
-
     const transactionData = {
       buyerID: user?._id,
       itemID: data._id,
       sellerID: data?.userID?._id,
       status: "completed",
     }
-
     try {
       const res = await createTransaction(transactionData)
       if (res.status === 200) {

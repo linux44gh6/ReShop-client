@@ -1,16 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { RSTable } from "@/components/ui/Core/RSTable/table";
-import { getUser } from "@/Service/auth";
 
 import {  getAllProduct } from "@/Service/Products";
-import { Plus } from "lucide-react";
-import Link from "next/link";
 
 
 const page = async() => {
 
     const {data}=await getAllProduct() 
-    const user=await getUser()
+    // const user=await getUser()
     return (
         <div>
             <div className="flex justify-between border-b pb-2">

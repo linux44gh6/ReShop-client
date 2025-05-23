@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client"
 import { Button } from "@/components/ui/button"
 import ProductCard from "@/components/ui/Core/ProductCard"
@@ -5,8 +7,6 @@ import { IProduct } from "@/Types/products"
 import Link from "next/link"
 
 const FeaturedProducts = ({ products }: { products: any }) => {
-  console.log(products, "product value")
-
   return (
     <div className="bg-white bg-opacity-50 py-10">
       <div className="container mx-auto">

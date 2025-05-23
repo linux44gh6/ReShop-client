@@ -33,10 +33,6 @@ export const getAllProduct = async ({ search, category, location }: { search?: s
         throw error;
     }
 };
-
-
-
-
 export const getProductByUserId=async(userId:string)=>{
     const res=await fetch(`${process.env.SERVER_URL}/listings/user/${userId}`,{
         method:"GET",

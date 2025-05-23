@@ -1,10 +1,8 @@
 "use client"
-import { Button } from "@/components/ui/button";
 import { getAllCategory } from "@/Service/Category";
 
 import { ICategory } from "@/Types/category";
 
-import Link from "next/link";
 import CategoryCard from "../../ui/Core/CategoryCard";
 import { useEffect, useState } from "react";
 

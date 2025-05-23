@@ -59,8 +59,6 @@ export function ChatDialog({ payload }: ChatDialogProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [buyerId, setBuyerId] = useState("")
   const user=useUser()
-  console.log(messages);
-  console.log(user);
   useEffect(() => {
     const fetchMessages = async () => {
       setIsLoading(true)
@@ -81,7 +79,7 @@ export function ChatDialog({ payload }: ChatDialogProps) {
     if (open) {
       fetchMessages()
     }
-  }, [payload.data._id, open])
+  }, [payload?.data?._id, open,user?.user?._id])
 
   console.log(messages);
   // Scroll to bottom when messages change
