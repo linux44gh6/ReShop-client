@@ -46,8 +46,8 @@ export function HowItWorksSection() {
         </div>
 
         <div className="flex justify-center">
-          <Link href="/sell">
-            <Button className="bg-[#10b981] hover:bg-emerald-700 text-white rounded-full px-6 py-2 flex items-center gap-2">
+          <Link href="/user/dashboard/post-product">
+            <Button className="bg-[#10b981] hover:bg-emerald-700 text-white cursor-pointer rounded-full px-6 py-2 flex items-center gap-2">
               Start Selling Today <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>

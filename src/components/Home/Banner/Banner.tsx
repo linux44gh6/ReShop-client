@@ -17,12 +17,14 @@ const Banner = () => {
             essentials, fashion, and more! Limited stock.
           </p>
 
+         <div className="flex items-center gap-6 mt-3">
+           <Link href={'/all-product'}>
+          <Button className="bg-[#10b981] hover:bg-emerald-700 text-white cursor-pointer rounded-full px-6 py-2 flex items-center gap-2">Buy Now</Button></Link>
           <Link href={'/all-product'}>
-          <Button className="rounded-full mr-2 cursor-pointer">Buy Now</Button></Link>
-          <Link href={'/all-product'}>
-          <Button className="rounded-full cursor-pointer" variant="outline">
+          <Button className="rounded-full cursor-pointer text-[#10b981]" variant="outline">
             All Products
           </Button></Link>
+         </div>
         </div>
         <div className="flex items-center justify-center">
           <Image src={banner} alt="cup image" width={500} height={500} className="rounded-3xl" />
