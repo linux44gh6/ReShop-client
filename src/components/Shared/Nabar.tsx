@@ -18,10 +18,12 @@ import { signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 import { getWishlist } from "@/Service/Wishlist"
+import { useSearch } from "../SearchContext/SearchContext"
 
 export default function Navbar() {
   const { user, isLoading, setUser,setIsLoading } = useUser()
   const [wishlistCount, setWishlistCount] = useState(0)
+  const {setSearch}=useSearch()
   useEffect(()=>{
     const fetchWishlistCount = async () => {
       setIsLoading(true)
@@ -60,6 +62,9 @@ export default function Navbar() {
         <div className="hidden md:flex flex-grow max-w-md mx-4 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <input
+          onChange={(e)=>{
+            setSearch(e.target.value)
+          }}
             type="text"
             placeholder="Search for products"
             className="w-full border border-gray-200 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-[#10b981] focus:border-transparent transition-all"
@@ -161,6 +166,9 @@ export default function Navbar() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <input
+          onChange={(e)=>{
+            setSearch(e.target.value)
+          }}
             type="text"
             placeholder="Search for products"
             className="w-full border border-gray-200 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-[#10b981] focus:border-transparent transition-all"

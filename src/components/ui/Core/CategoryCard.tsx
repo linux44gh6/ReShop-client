@@ -12,7 +12,7 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
   return (
     <div
       onClick={() => handleClick(category?._id)}
-      className="bg-white bg-opacity-50 border-2 border-gray-100 rounded-2xl text-center p-6 h-44 shadow-2xl cursor-pointer"
+      className="bg-white bg-opacity-50 border-2 border-gray-100 rounded-2xl text-center p-6 h-44 hover:shadow-md cursor-pointer"
     >
       <Image
         src={category?.icon ? category.icon[0] :'https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png'}
