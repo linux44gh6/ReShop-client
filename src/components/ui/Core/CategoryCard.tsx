@@ -9,19 +9,26 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
   const handleClick = (id: string) => {
     router.push(`/all-product?categoryId=${id}`);
   };
+
   return (
     <div
       onClick={() => handleClick(category?._id)}
-      className="bg-white bg-opacity-50 border-2 border-gray-100 rounded-2xl text-center p-6 h-44 hover:shadow-md cursor-pointer"
+      className="bg-white border-2 border-gray-100 rounded-2xl p-4 h-44 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-lg transition-all duration-500 hover:border-[#10b981] cursor-pointer "
     >
-      <Image
-        src={category?.icon ? category.icon[0] :'https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png'}
-        width={100}
-        height={100}
-        alt="category icon"
-        className="mx-auto rounded-full"
-      />
-      <h3 className="text-lg font-semibold truncate mt-3">{category?.name}</h3>
+      <div className="w-20 h-20 relative">
+        <Image
+          src={
+            category?.icon?.[0] ||
+            "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
+          }
+          fill
+          alt="category icon"
+          className="rounded-full object-cover"
+        />
+      </div>
+      <h3 className="text-base font-semibold text-gray-700 mt-3 truncate max-w-[120px]">
+        {category?.name}
+      </h3>
     </div>
   );
 };
