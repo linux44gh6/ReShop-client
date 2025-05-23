@@ -9,7 +9,6 @@ import Link from "next/link";
 const page = async() => {
 
     const {data}=await getAllProduct() 
-    console.log(data);
     return (
         <div>
             <div className="flex justify-between border-b pb-2">

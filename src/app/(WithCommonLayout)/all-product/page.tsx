@@ -8,6 +8,7 @@ const AllProductsPage = async() => {
     return (
         <div>
             <AllProducts Category={category}  />
+           
         </div>
     );
 };

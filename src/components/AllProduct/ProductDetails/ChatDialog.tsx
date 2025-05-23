@@ -59,14 +59,17 @@ export function ChatDialog({ payload }: ChatDialogProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [buyerId, setBuyerId] = useState("")
   const user=useUser()
+  console.log(messages);
+  console.log(user);
   useEffect(() => {
     const fetchMessages = async () => {
       setIsLoading(true)
       try {
-        const result = await getMessage(payload.data._id)
+        const result = await getMessage(user?.user?._id)
+        console.log(result);
         if (result.data?.message) {
-          setMessages(result.data.message)
-          setBuyerId(result.data.buyerId)
+          setMessages(result?.data?.message)
+          setBuyerId(result?.data?.buyerId)
         }
       } catch (error) {
         console.error("Error fetching messages:", error)

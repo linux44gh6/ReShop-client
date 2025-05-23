@@ -15,9 +15,10 @@ export default function CTASection() {
             <Button size="lg" className="bg-white text-[#10b981] hover:bg-gray-100 rounded-full px-8">
               Start Selling
             </Button>
+           <Link href={'/all-product'}>
             <Button size="lg"  className="border-white text-white bg-white/10 hover:bg-white/5 rounded-full px-8">
               Browse Items
-            </Button>
+            </Button></Link>
           </div>
 
           <div className="mt-8 text-white/80">
