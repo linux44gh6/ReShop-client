@@ -3,12 +3,13 @@ import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 import { FieldValues } from "react-hook-form"
 
-export const getAllProduct = async ({ search, category, location }: { search?: string; category?: string; location?: string } = {}) => {
+export const getAllProduct = async ({ search, category, location,productTypes }: { search?: string; category?: string; location?: string,productTypes?:string } = {}) => {
     try {
         const params = new URLSearchParams();
         if (search) params.append("searchTerm", search);
         if (category) params.append("category", category);
         if (location) params.append("location", location);
+        if(productTypes) params.append('productTypes',productTypes)
 
         const url = `${process.env.SERVER_URL}/listings?${params.toString()}`;
         console.log("Generated URL:", url); // Debugging line

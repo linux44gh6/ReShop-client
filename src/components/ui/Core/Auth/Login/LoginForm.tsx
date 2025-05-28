@@ -81,7 +81,7 @@ export default function LoginForm() {
                                             <FormItem>
                                                 <FormLabel />
                                                 <FormControl>
-                                                    <Input type="email" placeholder="Email  Address" className="p-3" {...field} />
+                                                    <Input type="email" placeholder="jonDoe@gmail.com" className="p-3" {...field} />
                                                 </FormControl>
                                                 <FormDescription />
                                                 <FormMessage />
@@ -95,7 +95,7 @@ export default function LoginForm() {
                                             <FormItem>
                                                 <FormLabel />
                                                 <FormControl>
-                                                    <Input type="password" placeholder=" Password" className="p-3" {...field} />
+                                                    <Input type="password" placeholder="******" className="p-3" {...field} />
                                                 </FormControl>
                                                 <FormDescription />
                                                 <FormMessage />

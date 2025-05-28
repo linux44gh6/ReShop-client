@@ -17,11 +17,17 @@ import {
 } from "../ui/select";
 import LocationMenu from "../LocationMenu/LocationMenu";
 import { getAllProduct } from "@/Service/Products";
-import Spinner from "../Loading/Loading";
 import { useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Skeleton } from "../ui/skeleton";
 
+export interface ProductFilterParams {
+  search?: string;
+  category?: string;
+  location?: string;
+  productTypes?: string; // or string[] if you want multiple selections
+}
 const AllProducts = ({ Category }: { Category: any }) => {
   const searchParams = useSearchParams();
   const categoryIdFromUrl = searchParams.get("categoryId");
@@ -31,8 +37,8 @@ const AllProducts = ({ Category }: { Category: any }) => {
   const [Search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [ProductLocation, setLocation] = useState<string>("");
+  const [selectedProductType, setSelectedProductType] = useState<string>("");
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
@@ -48,30 +54,51 @@ const AllProducts = ({ Category }: { Category: any }) => {
         search: Search,
         category: selectedCategory || categoryIdFromUrl || undefined,
         location: ProductLocation,
+        productTypes: selectedProductType,
       });
       setProducts(fetchedProducts);
-      setCurrentPage(1); // reset pagination
+      setCurrentPage(1);
       setLoading(false);
     };
 
     fetchProducts();
-  }, [selectedCategory, Search, ProductLocation, categoryIdFromUrl]);
+  }, [selectedCategory, Search, ProductLocation, categoryIdFromUrl, selectedProductType]);
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <Container>
+        <div className="flex flex-col md:flex-row gap-5 my-8">
+          <div className="w-full md:w-1/4 space-y-4">
+            <Skeleton className="h-6 w-3/4 rounded" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-6 w-3/4 mt-6 rounded" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+          <div className="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, idx) => (
+              <div key={idx} className="space-y-4">
+                <Skeleton className="h-40 w-full rounded-xl" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-1/3" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </Container>
+    );
   }
 
   return (
     <Container>
-      {/* Filters */}
       <div className="flex flex-col md:flex-row justify-between items-center mt-10 gap-4">
-        {/* Location */}
         <div className="w-full md:w-auto">
           <h1 className="text-xl font-bold">Location</h1>
           <LocationMenu setLocation={setLocation} />
         </div>
 
-        {/* Category */}
         <div className="w-full md:w-auto">
           <h1 className="text-xl font-bold">Category</h1>
           <Select onValueChange={(value) => setSelectedCategory(value)}>
@@ -88,7 +115,6 @@ const AllProducts = ({ Category }: { Category: any }) => {
           </Select>
         </div>
 
-        {/* Search */}
         <div className="w-full md:w-auto">
           <h1 className="text-xl font-bold">Find</h1>
           <Input
@@ -100,10 +126,12 @@ const AllProducts = ({ Category }: { Category: any }) => {
         </div>
       </div>
 
-      {/* Product List */}
       <div className="flex flex-col md:flex-row gap-5 my-8">
         <div className="w-full md:w-1/4">
-          <FilterSidebar />
+          <FilterSidebar
+            selectedProductTypes={selectedProductType}
+            setSelectedProductTypes={setSelectedProductType}
+          />
         </div>
         <div className="w-full md:w-3/4">
           {currentProducts.length > 0 ? (
@@ -116,7 +144,6 @@ const AllProducts = ({ Category }: { Category: any }) => {
                 ))}
               </div>
 
-              {/* Pagination */}
               <div className="flex justify-center mt-6 space-x-2">
                 <Button
                   variant="outline"
