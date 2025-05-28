@@ -5,8 +5,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect } from "react";
 
 interface FilterSidebarProps {
-  selectedProductTypes: string;
-  setSelectedProductTypes: React.Dispatch<React.SetStateAction<string>>;
+  selectedProductTypes: string[];
+  setSelectedProductTypes: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const FilterSidebar = ({
@@ -29,7 +29,11 @@ const FilterSidebar = ({
   const availability = ["In Stock", "Pre Order", "Upcoming"];
 
   const toggleProductType = (type: string) => {
-    setSelectedProductTypes(type);
+    setSelectedProductTypes((prev) =>
+      prev.includes(type)
+        ? prev.filter((t) => t !== type)
+        : [...prev, type]
+    );
   };
 
   useEffect(() => {
@@ -44,14 +48,13 @@ const FilterSidebar = ({
           {productTypes.map((type) => (
             <li key={type} className="flex items-center gap-2">
               <Checkbox
-                checked={selectedProductTypes === type}
+                checked={selectedProductTypes.includes(type)}
                 onCheckedChange={() => toggleProductType(type)}
               />
               <span>{type}</span>
             </li>
           ))}
         </ul>
-
         <h2 className="text-lg font-semibold mt-6">Brands</h2>
         <ul className="space-y-2 mt-2">
           {brands.map((brand) => (

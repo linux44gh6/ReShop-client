@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IProduct } from "@/Types/products";
 import FilterSidebar from "./FilterSidebar/FilterSidebar";
 import ProductCard from "../ui/Core/ProductCard";
@@ -26,8 +26,9 @@ export interface ProductFilterParams {
   search?: string;
   category?: string;
   location?: string;
-  productTypes?: string; // or string[] if you want multiple selections
+  productTypes?: string; // send as a comma-separated string if API expects string, otherwise string[]
 }
+
 const AllProducts = ({ Category }: { Category: any }) => {
   const searchParams = useSearchParams();
   const categoryIdFromUrl = searchParams.get("categoryId");
@@ -37,14 +38,15 @@ const AllProducts = ({ Category }: { Category: any }) => {
   const [Search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [ProductLocation, setLocation] = useState<string>("");
-  const [selectedProductType, setSelectedProductType] = useState<string>("");
+  const [selectedProductType, setSelectedProductType] = useState<string[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = products?.data?.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const currentProducts =
+    products?.data?.slice(indexOfFirstItem, indexOfLastItem) || [];
   const totalPages = Math.ceil((products?.data?.length || 0) / itemsPerPage);
 
   useEffect(() => {
@@ -54,7 +56,8 @@ const AllProducts = ({ Category }: { Category: any }) => {
         search: Search,
         category: selectedCategory || categoryIdFromUrl || undefined,
         location: ProductLocation,
-        productTypes: selectedProductType,
+        // Here, join as a comma string (adjust as per your API)
+        productType: selectedProductType.join(","),
       });
       setProducts(fetchedProducts);
       setCurrentPage(1);
@@ -62,6 +65,7 @@ const AllProducts = ({ Category }: { Category: any }) => {
     };
 
     fetchProducts();
+    // eslint-disable-next-line
   }, [selectedCategory, Search, ProductLocation, categoryIdFromUrl, selectedProductType]);
 
   if (loading) {
@@ -98,7 +102,6 @@ const AllProducts = ({ Category }: { Category: any }) => {
           <h1 className="text-xl font-bold">Location</h1>
           <LocationMenu setLocation={setLocation} />
         </div>
-
         <div className="w-full md:w-auto">
           <h1 className="text-xl font-bold">Category</h1>
           <Select onValueChange={(value) => setSelectedCategory(value)}>
@@ -114,7 +117,6 @@ const AllProducts = ({ Category }: { Category: any }) => {
             </SelectContent>
           </Select>
         </div>
-
         <div className="w-full md:w-auto">
           <h1 className="text-xl font-bold">Find</h1>
           <Input
@@ -125,7 +127,6 @@ const AllProducts = ({ Category }: { Category: any }) => {
           />
         </div>
       </div>
-
       <div className="flex flex-col md:flex-row gap-5 my-8">
         <div className="w-full md:w-1/4">
           <FilterSidebar
@@ -143,7 +144,6 @@ const AllProducts = ({ Category }: { Category: any }) => {
                   </div>
                 ))}
               </div>
-
               <div className="flex justify-center mt-6 space-x-2">
                 <Button
                   variant="outline"
