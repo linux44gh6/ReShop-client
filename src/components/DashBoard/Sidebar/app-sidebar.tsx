@@ -2,10 +2,10 @@
  import { UserIcon } from "lucide-react"
 import * as React from "react"
 import {
-  AudioWaveform,
+
   BookOpen,
   Bot,
-  Command,
+
   GalleryVerticalEnd,
   SquareTerminal,
 } from "lucide-react"
@@ -33,17 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         name: "ReShopp;.",
         logo: GalleryVerticalEnd,
-        plan: "Enterprise",
-      },
-      {
-        name: "Acme Corp.",
-        logo: AudioWaveform,
-        plan: "Startup",
-      },
-      {
-        name: "Evil Corp.",
-        logo: Command,
-        plan: "Free",
+        plan: "Standard",
       },
     ],
     navMain: [

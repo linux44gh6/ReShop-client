@@ -65,7 +65,7 @@ export function AboutUsSection() {
               </div>
             </div>
 
-            <Link href="/our-story">
+            <Link href="/story">
               <Button className="bg-[#10b981] hover:bg-emerald-700 text-white rounded-full px-6">
                 Learn More About Our Story
               </Button>

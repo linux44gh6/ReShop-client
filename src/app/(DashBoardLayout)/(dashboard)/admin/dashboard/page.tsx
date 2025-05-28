@@ -1,13 +1,15 @@
 import { getAllProduct } from "@/Service/Products";
 import { getAllUsers } from "@/Service/Users";
-import { BarChartGraph } from "@/components/BarChart/BarChart";
-import { VisitorsGraph } from "@/components/VisitorsGraph/visitorsGraph";
+import { Component } from "@/components/BarChart/BarChart";
+import { PiChart } from "@/components/VisitorsGraph/visitorsGraph";
+
 import {
     Card,
     CardContent,
   } from "@/components/ui/card"
 const AdminDashboard = async () => {
  const userData=await getAllUsers()
+ console.log(userData);
 const totalProduct=await getAllProduct()
     return (
         <div className=" ">
@@ -29,10 +31,10 @@ const totalProduct=await getAllProduct()
                     </Card>
                 </div>
                 <div className=" h-32 bg-teal-200 rounded-2xl shadow-2xl">
-                    <VisitorsGraph/>
+                   <PiChart/>
                 </div>
             </div>
-            <BarChartGraph/>
+            <Component/>
         </div>
     );
 };

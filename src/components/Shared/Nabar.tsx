@@ -153,7 +153,7 @@ export default function Navbar() {
                   <DropdownMenuSeparator />
                   {/* Add Products to Dropdown */}
                   <DropdownMenuItem className="cursor-pointer hover:bg-emerald-50 hover:text-[#10b981] rounded-md transition-colors">
-                    <Link href="/products" className="flex items-center gap-2 w-full">
+                    <Link href="/all-product" className="flex items-center gap-2 w-full">
                       <Boxes className="h-4 w-4" />
                       Products
                     </Link>
