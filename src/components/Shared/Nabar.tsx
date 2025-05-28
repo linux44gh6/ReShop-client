@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "../ui/button"
-import { LogOut, MessageCircle, Search, ShoppingBag } from "lucide-react"
+import { LogOut, MessageCircle, Search, ShoppingBag, Boxes } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,6 +87,18 @@ export default function Navbar() {
         </div>
 
         <nav className="flex items-center gap-3 md:gap-4">
+          {/* Products Link */}
+          <Link href="/all-product" legacyBehavior passHref>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors font-semibold"
+            >
+              <Boxes className="h-5 w-5 mr-1" />
+              <span className="hidden sm:inline">Products</span>
+            </Button>
+          </Link>
+
+        {user&&
           <Button
             variant="ghost"
             size="icon"
@@ -95,6 +107,8 @@ export default function Navbar() {
             <MessageCircle className="h-5 w-5" />
             <span className="sr-only">Messages</span>
           </Button>
+
+        }
 
           {user?.role === "user" && (
             <Link href={`/${user.role}/dashboard/wishlist`} className="relative">
@@ -137,6 +151,13 @@ export default function Navbar() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  {/* Add Products to Dropdown */}
+                  <DropdownMenuItem className="cursor-pointer hover:bg-emerald-50 hover:text-[#10b981] rounded-md transition-colors">
+                    <Link href="/products" className="flex items-center gap-2 w-full">
+                      <Boxes className="h-4 w-4" />
+                      Products
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer hover:bg-emerald-50 hover:text-[#10b981] rounded-md transition-colors">
                     Profile
                   </DropdownMenuItem>

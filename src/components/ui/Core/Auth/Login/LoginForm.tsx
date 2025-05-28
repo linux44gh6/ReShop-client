@@ -102,7 +102,7 @@ export default function LoginForm() {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit" className="w-full  text-white cursor-pointer">Sign In</Button>
+                                    <Button type="submit" className="w-full  cursor-pointer bg-[#10b981]">Sign In</Button>
                                 </form>
                                 <p>Don&apos;t have an account?<Link href={'/register'} className="text-blue-500">Sign Up</Link></p>
                             </Form>

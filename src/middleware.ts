@@ -28,7 +28,8 @@ export const config = {
   matcher: [
     "/user/:path*",
     "/admin/:path*",
-    // "/details/:path*",
+    "/all-product/:id",
     "/checkout",
   ],
 };
+

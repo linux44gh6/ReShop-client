@@ -109,7 +109,7 @@ export default function SignupForm() {
               </p>
             </div>
                {/* Signup Button */}
-            <Button type="submit" className="w-full cursor-pointer">
+            <Button type="submit" className="w-full cursor-pointer bg-[#10b981]">
               Create account
             </Button>
               </form>
