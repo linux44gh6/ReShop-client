@@ -49,18 +49,18 @@ export default function Navbar() {
     return (
       <header className="border-b w-full bg-white shadow-sm sticky top-0 z-50">
         <div className="container flex justify-between items-center mx-auto h-16 px-4 md:px-6 lg:px-8">
-          <Skeleton className="h-8 w-24 rounded-lg" /> {/* Logo */}
+          <Skeleton className="h-8 w-24 rounded-lg" />
           <div className="hidden md:flex flex-grow max-w-md mx-4">
-            <Skeleton className="h-10 w-full rounded-full" /> {/* Search */}
+            <Skeleton className="h-10 w-full rounded-full" />
           </div>
           <div className="flex items-center gap-3 md:gap-4">
-            <Skeleton className="h-9 w-9 rounded-full" /> {/* Message */}
-            <Skeleton className="h-9 w-9 rounded-full" /> {/* Wishlist/Cart */}
-            <Skeleton className="h-9 w-9 rounded-full" /> {/* Avatar */}
+            <Skeleton className="h-9 w-9 rounded-full" /> 
+            <Skeleton className="h-9 w-9 rounded-full" /> 
+            <Skeleton className="h-9 w-9 rounded-full" /> 
           </div>
         </div>
         <div className="md:hidden px-4 pb-3">
-          <Skeleton className="h-10 w-full rounded-full" /> {/* Mobile search */}
+          <Skeleton className="h-10 w-full rounded-full" />
         </div>
       </header>
     )
@@ -75,7 +75,7 @@ export default function Navbar() {
           </Link>
         </h1>
 
-        {/* Search Bar - Desktop */}
+       
         <div className="hidden md:flex flex-grow max-w-md mx-4 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <input
@@ -87,28 +87,56 @@ export default function Navbar() {
         </div>
 
         <nav className="flex items-center gap-3 md:gap-4">
-          {/* Products Link */}
+          {/* Home Link */}
+          <Link href="/" legacyBehavior passHref>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors font-semibold"
+            >
+              Home
+            </Button>
+          </Link>
+
+          {/* Sell an Item Link */}
+          <Link href={`${user?.role}/dashboard/post-product`} legacyBehavior passHref>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors font-semibold"
+            >
+              Sell an Item
+            </Button>
+          </Link>
+
+          <Link href="/story" legacyBehavior passHref>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors font-semibold"
+            >
+              About
+            </Button>
+          </Link>
+
           <Link href="/all-product" legacyBehavior passHref>
             <Button
               variant="ghost"
               className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors font-semibold"
             >
-              <Boxes className="h-5 w-5 mr-1" />
+              
               <span className="hidden sm:inline">Products</span>
             </Button>
           </Link>
 
-        {user&&
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors"
-          >
-            <MessageCircle className="h-5 w-5" />
-            <span className="sr-only">Messages</span>
-          </Button>
-
-        }
+          {user &&
+            <Link href={`${user.role}/dashboard`}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors"
+            >
+              <MessageCircle className="h-5 w-5" />
+              <span className="sr-only">Messages</span>
+            </Button></Link>
+          }
 
           {user?.role === "user" && (
             <Link href={`/${user.role}/dashboard/wishlist`} className="relative">
@@ -210,3 +238,4 @@ export default function Navbar() {
     </header>
   )
 }
+

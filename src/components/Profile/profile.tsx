@@ -1,160 +1,93 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Form, FormControl, FormField, FormItem,  FormMessage } from "../ui/form";
-import { sendImagesToCloudinary } from "@/Constans";
-import { updateProfile } from "@/Service/Users";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
-import { getUser } from "@/Service/auth";
-import { IUser } from "@/Types/loginData";
-
-interface UserProfileData {
-    name: string;
-    phone_number: string;
-    profileImg: string;
-}
-
-export default function UserProfile() {
-   const [user,setUser]=useState<IUser|null>(null)
-   useEffect(() => {
-       const userInfo=async()=>{
-           const user=await getUser()
-           setUser(user)
-       }
-       userInfo()
-   },[])
-    const [imageFiles, setImageFiles] = useState<File[]>([]);
-
-    const [isEditing, setIsEditing] = useState(false);
-    
-    console.log(user,"form user");
-    // Initial user data (Replace with API data if needed)
-    const form = useForm<UserProfileData>({
-        defaultValues:{
-            name:'',
-            phone_number:'',
-            profileImg:'',
-        }
-    });
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { format } from "date-fns";
+import { Reply, Trash } from "lucide-react";
+import { Button } from "../ui/button";
 
 
-    const { handleSubmit, } = form;
-    // Handle Image Preview
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-      if (file) {
-          setImageFiles([file]);
-      }
-    };
+const defaultMessages = [
+  {
+    id: "1",
+    subject: "Welcome to ReShop!",
+    body: "Thank you for joining ReShop. Explore and enjoy buying and selling second-hand items.",
+    sender: "Admin",
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "2",
+    subject: "Tips for Successful Selling",
+    body: "Make sure to upload clear photos and provide detailed descriptions for your items.",
+    sender: "Support",
+    createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+  },
+  {
+    id: "3",
+    subject: "Your Recent Purchase",
+    body: "Your order #123456 has been shipped. Thank you for shopping with ReShop!",
+    sender: "Sales Team",
+    createdAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+  },
+];
 
-    // Handle Form Submit (Save Changes)
-    const onSubmit =async (data: UserProfileData) => {
-        const Image=await sendImagesToCloudinary(imageFiles)
-        console.log(Image);
-        const payload={...data,profileImg:Image[0]};
-        if(!user?._id){
-            toast.error("User ID is missing");
-            redirect  ("/login");
-        }
-        const res=await updateProfile(user?._id,payload)
-        console.log(res);
-        if(res.status===200){
-            toast.success(res.message)
-        }else{
-            toast.error(res.message)
-        }
-        console.log(payload);
-        setIsEditing(false);
-    };
+export default function UserMessages() {
+  // Directly use the defaultMessages array
+  const [messages] = useState(defaultMessages);
 
-    return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <Card className="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
-                <CardHeader>
-                    <CardTitle className="text-center text-xl font-bold">User Profile</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {!isEditing ? (
-                        // View Mode: Display User Details
-                        <div className="flex flex-col items-center space-y-4">
-                            <Avatar className="w-24 h-24 border">
-                                <AvatarImage src={user?.profileImg} />
-                                <AvatarFallback>Profile</AvatarFallback>
-                            </Avatar>
-                            <div className="text-lg font-semibold">{user?.name}</div>
-                            <div className="text-gray-600">{user?.phone_number}</div>
-                            <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
-                                Edit Profile
-                            </Button>
-                        </div>
-                    ) : (
-                        // Edit Mode: Form for Updating User Details
-                        <Form {...form}>
-                            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                                {/* Profile Picture Upload */}
-                                <div className="flex flex-col items-center gap-3">
-                                   
-                                    <Label htmlFor="profilePic" className="cursor-pointer text-blue-600 hover:underline">
-                                        Change Profile Picture
-                                    </Label>
-                                    <Input type="file" accept="image/*" onChange={handleImageChange} />
-                                </div>
-
-                                {/* Name Input */}
-                                <div>
-                                    <Label htmlFor="name">Your Name</Label>
-                                    <FormField
-                                        control={form.control}
-                                        name="name"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input type="text" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-
-                                {/* Phone Input */}
-                                <div>
-                                    <Label htmlFor="phone">Your Phone Number</Label>
-                                    <FormField
-                                        control={form.control}
-                                        name="phone_number"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input type="text" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-
-                                {/* Action Buttons */}
-                                <div className="flex justify-between">
-                                    <Button type="submit" className="bg-green-600 hover:bg-green-700">
-                                        Save
-                                    </Button>
-                                    <Button type="button" onClick={() => setIsEditing(false)} className="bg-gray-400 hover:bg-gray-500">
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </form>
-                        </Form>
-                    )}
-                </CardContent>
-            </Card>
-        </div>
-    );
+  return (
+    <div className="flex justify-center  min-h-screen bg-gray-100 p-4">
+      <Card className="w-full  rounded-lg">
+        <CardHeader>
+          <CardTitle>Your Messages</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Subject</TableHead>
+                <TableHead>Message</TableHead>
+                <TableHead>Sender</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {messages.map(({ id, subject, body, sender, createdAt }) => (
+                <TableRow key={id}>
+                  <TableCell className="font-medium">{subject || "-"}</TableCell>
+                  <TableCell className="max-w-xs truncate" title={body}>
+                    {body.length > 100 ? `${body.slice(0, 100)}...` : body}
+                  </TableCell>
+                  <TableCell>{sender || "-"}</TableCell>
+                  <TableCell>
+                    {createdAt ? format(new Date(createdAt), "PPP p") : "-"}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-2">
+                        <Button variant={"outline"}><Reply/></Button>
+                        <Button variant={"outline"} className="text-red-500"><Trash/></Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
