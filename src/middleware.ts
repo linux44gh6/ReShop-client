@@ -13,7 +13,7 @@ export const middleware = async (request: NextRequest) => {
   // If user is not logged in
   if (!userInfo) {
     if (authRoutes.includes(pathname)) {
-      return NextResponse.next(); // allow login/register
+      return NextResponse.next(); 
     } else {
       return NextResponse.redirect(
         new URL(`/login?redirectPath=${pathname}`, request.url)
@@ -29,6 +29,7 @@ export const config = {
     "/user/:path*",
     "/admin/:path*",
     "/checkout",
+
   ],
 };
 

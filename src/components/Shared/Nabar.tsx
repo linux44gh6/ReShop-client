@@ -98,6 +98,7 @@ export default function Navbar() {
           </Link>
 
           {/* Sell an Item Link */}
+         {user&&
           <Link href={`${user?.role}/dashboard/post-product`} legacyBehavior passHref>
             <Button
               variant="ghost"
@@ -106,6 +107,8 @@ export default function Navbar() {
               Sell an Item
             </Button>
           </Link>
+
+         }
 
           <Link href="/story" legacyBehavior passHref>
             <Button
