@@ -27,11 +27,11 @@ export default function LoginForm() {
         }
     });
     const handleSubmit: SubmitHandler<FieldValues> = async(data: FieldValues) => {
+        const id=toast.loading("Logging In....")
       try {
         const res=await loginUser(data)
-        console.log(res);
         if(res.status===201){
-            toast.success(res.message)
+            toast.success(res.message,{id:id})
             setIsLoading(true)
             router.push("/")
         }else{
@@ -42,16 +42,16 @@ export default function LoginForm() {
       }
     }
 
-    const handleGoogleLogin = async()=>{
+   const handleGoogleLogin = async () => {
+  try {
+    await signIn("google", {
+      callbackUrl: "http://localhost:3000",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-        try{
-            await signIn("google", {
-                callbackUrl:'http://localhost/3000',
-            });
-        }catch(error){
-            console.log(error);
-        }
-    }
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <Card className="flex flex-row w-full max-w-4xl bg-white shadow-lg rounded-xl overflow-hidden">

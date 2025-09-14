@@ -4,6 +4,7 @@ import { getUser } from "@/Service/auth";
 import { IUser } from "@/Types/loginData";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 interface  IUserProviderValues{
+    avatar: string;
     name: string | undefined;
     user:IUser|null
     isLoading:boolean
@@ -24,7 +25,7 @@ const ContextProvider = ({children}:{children: React.ReactNode}) => {
         handleUser()
     },[isLoading])
     return (
-        <UserContext.Provider value={{name: user?.name, user, isLoading, setUser, setIsLoading}} >
+        <UserContext.Provider value={{name: user?.name, avatar: user?.profileImg || "", user, isLoading, setUser, setIsLoading}} >
             {children}
         </UserContext.Provider>
     );

@@ -24,7 +24,7 @@ const totalProduct=await getAllProduct()
                 <Card className="h-76 bg-amber-500 text-white">
                         <CardContent>
                             <h2 className="font-bold text-2xl text-center">Total User</h2>
-                            <h1 className=" font-bold text-5xl text-center mt-10">{userData?.data.length}</h1>
+                            <h1 className=" font-bold text-5xl text-center mt-10">{userData?.data?.length}</h1>
                         </CardContent>
                     </Card>
                 </div>

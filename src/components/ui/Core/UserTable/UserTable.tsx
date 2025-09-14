@@ -55,7 +55,7 @@ export function UserTable({ data }: { data: any }) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data?.data.map((product:IUser) => (
+                    {data?.data?.map((product:IUser) => (
                         <TableRow key={product?._id}>
                             <TableCell className="font-medium">
                                 <Image

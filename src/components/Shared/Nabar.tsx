@@ -1,4 +1,5 @@
 "use client"
+
 import { Button } from "../ui/button"
 import { LogOut, MessageCircle, Search, ShoppingBag } from "lucide-react"
 import {
@@ -20,20 +21,24 @@ import { useEffect, useState } from "react"
 import { getWishlist } from "@/Service/Wishlist"
 
 export default function Navbar() {
-  const { user, isLoading, setUser,setIsLoading } = useUser()
+  const { user, isLoading, setUser } = useUser()
   const [wishlistCount, setWishlistCount] = useState(0)
-  useEffect(()=>{
-    const fetchWishlistCount = async () => {
-      setIsLoading(true)
-      const result=await getWishlist(user?._id as string)
-      setWishlistCount(result?.data?.length)
-    }
-    fetchWishlistCount()
-  },[user?._id, setIsLoading])
-  // This would be replaced with actual cart data
-  const cartItemCount = wishlistCount
 
-  if (isLoading) {
+  useEffect(() => {
+    const fetchWishlistCount = async () => {
+      if (!user?._id) return
+      try {
+        const result = await getWishlist(user._id)
+        setWishlistCount(result?.data?.length || 0)
+      } catch (err) {
+        console.error("Failed to fetch wishlist:", err)
+      }
+    }
+
+    fetchWishlistCount()
+  }, [user?._id])
+
+  if (isLoading && !user) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Spinner />
@@ -77,24 +82,23 @@ export default function Navbar() {
             <span className="sr-only">Messages</span>
           </Button>
 
-        {user?.role==='user' &&
-          <Link href={`/${user.role}/dashboard/wishlist`} className="relative">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors"
-            >
-              <ShoppingBag className="h-5 w-5" />
-              <span className="sr-only">Cart</span>
-            </Button>
-            {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#10b981] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {cartItemCount}
-              </span>
-            )}
-          </Link>
-
-        }
+          {user?.role === "user" && (
+            <Link href={`/${user.role}/dashboard/wishlist`} className="relative">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full hover:bg-emerald-50 hover:text-[#10b981] transition-colors"
+              >
+                <ShoppingBag className="h-5 w-5" />
+                <span className="sr-only">Cart</span>
+              </Button>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#10b981] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+          )}
 
           {user ? (
             <div className="flex gap-2 items-center">
@@ -146,7 +150,7 @@ export default function Navbar() {
                 variant="outline"
                 className={cn(
                   "rounded-full border-[#10b981] text-[#10b981] hover:bg-[#10b981] hover:text-white",
-                  "transition-all duration-200",
+                  "transition-all duration-200"
                 )}
               >
                 Login
